@@ -1,11 +1,27 @@
+import { db } from './firebase';
+import {
+	collection,
+	addDoc,
+	query,
+	where,
+	onSnapshot,
+	doc,
+	updateDoc,
+	deleteDoc,
+} from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import { auth } from './firebase';
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	signOut,
+	onAuthStateChanged,
+} from 'firebase/auth';
 
 function App() {
-	const [plants, setPlants] = useState(() => {
-		const saved = localStorage.getItem('plants');
-		return saved ? JSON.parse(saved) : [];
-	});
+	const [plants, setPlants] = useState([]);
+	const [loadingPlants, setLoadingPlants] = useState(true);
 
 	const [name, setName] = useState('');
 	const [photo, setPhoto] = useState(null);
@@ -14,59 +30,112 @@ function App() {
 	const [editPlant, setEditPlant] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
 
-	useEffect(() => {
-		localStorage.setItem('plants', JSON.stringify(plants));
-	}, [plants]);
+	const [user, setUser] = useState(null);
+	const [authMode, setAuthMode] = useState('login');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [authError, setAuthError] = useState('');
 
+	useEffect(() => {
+		if (!user) {
+			setPlants([]);
+			setLoadingPlants(false);
+			return;
+		}
+
+		setLoadingPlants(true);
+
+		const plantsRef = collection(db, 'plants');
+		const q = query(plantsRef, where('userId', '==', user.uid));
+
+		const unsubscribe = onSnapshot(q, (snapshot) => {
+			const data = snapshot.docs.map((docSnap) => ({
+				id: docSnap.id,
+				...docSnap.data(),
+			}));
+			setPlants(data);
+			setLoadingPlants(false);
+		});
+
+		return () => unsubscribe();
+	}, [user]);
+
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+			setUser(firebaseUser || null);
+		});
+		return () => unsubscribe();
+	}, []);
+
+	const handleRegister = async (e) => {
+		e.preventDefault();
+		setAuthError('');
+		try {
+			await createUserWithEmailAndPassword(auth, email, password);
+			setEmail('');
+			setPassword('');
+		} catch (err) {
+			setAuthError(err.message);
+		}
+	};
+
+	const handleLogin = async (e) => {
+		e.preventDefault();
+		setAuthError('');
+		try {
+			await signInWithEmailAndPassword(auth, email, password);
+			setEmail('');
+			setPassword('');
+		} catch (err) {
+			setAuthError(err.message);
+		}
+	};
+
+	const handleLogout = async () => {
+		await signOut(auth);
+	};
 
 	const readFileAsDataUrl = (file, callback) => {
 		const reader = new FileReader();
 		reader.onloadend = () => callback(reader.result);
 		reader.readAsDataURL(file);
-	}
+	};
 
 	const handlePhotoChange = (e) => {
 		const file = e.target.files[0];
 		if (file) readFileAsDataUrl(file, setPhoto);
 	};
 
-	const handleAddPlant = (e) => {
+	const handleAddPlant = async (e) => {
 		e.preventDefault();
-		if (name.trim() === '') return;
+		if (name.trim() === '' || !user) return;
 
 		const newPlant = {
-			id: Date.now(),
 			name,
 			photo,
 			acquiredAt,
 			wateringLog: [],
+			userId: user.uid,
+			createdAt: new Date().toISOString(),
 		};
 
-		setPlants([...plants, newPlant]);
+		await addDoc(collection(db, 'plants'), newPlant);
+
 		setName('');
 		setPhoto(null);
-		e.target.reset();
 		setAcquiredAt('');
+		e.target.reset();
 	};
 
-
-	const handleDeletePlant = (id) => {
-		setPlants(plants.filter(plant => plant.id !== id));
+	const handleDeletePlant = async (id) => {
+		await deleteDoc(doc(db, 'plants', id));
 	};
 
-
-	const handleWaterPlant = (id) => {
-		const updatedPlants = plants.map(plant => {
-			if (plant.id === id) {
-				return {
-					...plant,
-					wateringLog: [...plant.wateringLog, new Date().toISOString()]
-				};
-			}
-			return plant;
-		});
-		setPlants(updatedPlants);
-	}
+	const handleWaterPlant = async (id, wateringLog) => {
+		const newLog = [...(wateringLog || []), new Date().toISOString()];
+		const plantRef = doc(db, 'plants', id);
+		await updateDoc(plantRef, { wateringLog: newLog });
+	};
 
 	const startEditPlant = (plant) => {
 		setEditingId(plant.id);
@@ -79,17 +148,20 @@ function App() {
 
 	const handleEditPhotoChange = (e) => {
 		const file = e.target.files[0];
-		if (file) readFileAsDataUrl(file, (dataUrl) =>
-			setEditPlant({ ...editPlant, photo: dataUrl })
-		);
+		if (file)
+			readFileAsDataUrl(file, (dataUrl) =>
+				setEditPlant({ ...editPlant, photo: dataUrl })
+			);
 	};
 
-	const saveEditPlant = (id) => {
-		setPlants(plants.map(plant =>
-			plant.id === id
-				? { ...plant, ...editPlant }
-				: plant
-		));
+	const saveEditPlant = async (id) => {
+		const plantRef = doc(db, 'plants', id);
+		await updateDoc(plantRef, {
+			name: editPlant.name,
+			acquiredAt: editPlant.acquiredAt,
+			photo: editPlant.photo,
+		});
+
 		setEditingId(null);
 		setEditPlant(null);
 	};
@@ -99,11 +171,9 @@ function App() {
 		setEditPlant(null);
 	};
 
-
 	const formatDate = (isoString) => {
 		return new Date(isoString).toLocaleDateString('ru-RU');
-	}
-
+	};
 
 	const getLastWatering = (wateringLog) => {
 		if (!wateringLog.length) return 'Ещё не поливали';
@@ -114,14 +184,67 @@ function App() {
 		plant.name.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
+	if (!user) {
+		return (
+			<div className='mainBlock'>
+				<h1>🌿 Мои растения</h1>
+
+				<div className='authToggle'>
+					<button
+						className={`btn ${authMode === 'login' ? 'btnSubmit' : ''}`}
+						onClick={() => setAuthMode('login')}
+					>
+						Войти
+					</button>
+					<button
+						className={`btn ${authMode === 'register' ? 'btnSubmit' : ''}`}
+						onClick={() => setAuthMode('register')}
+					>
+						Регистрация
+					</button>
+				</div>
+
+				<form
+					className='authForm'
+					onSubmit={authMode === 'login' ? handleLogin : handleRegister}
+				>
+					<input
+						className='input inputLogin'
+						type='email'
+						placeholder='E-mail'
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						required
+					/>
+					<input
+						className='input inputPass'
+						type='password'
+						placeholder='Пароль (мин. 6 символов)'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						required
+					/>
+					{authError && <p className='authError'>{authError}</p>}
+					<button className='btn btnSubmit' type='submit'>
+						{authMode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+					</button>
+				</form>
+			</div>
+		);
+	}
+
 	return (
 		<div className='mainBlock'>
 			<h1>🌿 Мои растения</h1>
 
-			<input 
+			<button className='btn btnLogOut' onClick={handleLogout}>
+				Выйти
+			</button>
+
+			<input
 				className='searchInput'
-				type="text" 
-				placeholder='Поиск по названию' 
+				type='text'
+				placeholder='Поиск по названию'
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>
@@ -133,8 +256,8 @@ function App() {
 							Название растения
 							<input
 								className='input plantName'
-								type="text"
-								placeholder="напр. алоказия фрайдек"
+								type='text'
+								placeholder='напр. алоказия фрайдек'
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								required
@@ -144,7 +267,7 @@ function App() {
 							Дата появления
 							<input
 								className='plantDate'
-								type="date"
+								type='date'
 								value={acquiredAt}
 								onChange={(e) => setAcquiredAt(e.target.value)}
 							/>
@@ -152,15 +275,19 @@ function App() {
 					</div>
 					<input
 						className='fileLoad'
-						type="file"
-						accept="image/*"
+						type='file'
+						accept='image/*'
 						onChange={handlePhotoChange}
 					/>
-					<button className='btn btnSubmit' type="submit">
+					<button className='btn btnSubmit' type='submit'>
 						Добавить
 					</button>
 				</div>
 			</form>
+
+			{loadingPlants && (
+				<p className='startMessage'>Загружаем ваши растения…</p>
+			)}
 
 			<div className='plantListWrap'>
 				{filteredPlants.map((plant) => (
@@ -169,7 +296,9 @@ function App() {
 							<img
 								className='plantPhoto'
 								src={editingId === plant.id ? editPlant?.photo : plant.photo}
-								alt={editingId === plant.id ? editPlant?.name || plant.name : plant.name}
+								alt={
+									editingId === plant.id ? editPlant?.name || plant.name : plant.name
+								}
 							/>
 						)}
 
@@ -178,27 +307,37 @@ function App() {
 								<>
 									<input
 										className='input plantName'
-										type="text"
+										type='text'
 										value={editPlant.name}
-										onChange={(e) => setEditPlant({ ...editPlant, name: e.target.value })}
+										onChange={(e) =>
+											setEditPlant({ ...editPlant, name: e.target.value })
+										}
 									/>
 									<input
 										className='plantDate'
-										type="date"
+										type='date'
 										value={editPlant.acquiredAt}
-										onChange={(e) => setEditPlant({ ...editPlant, acquiredAt: e.target.value })}
+										onChange={(e) =>
+											setEditPlant({
+												...editPlant,
+												acquiredAt: e.target.value,
+											})
+										}
 									/>
 									<input
 										className='fileLoad'
-										type="file"
-										accept="image/*"
+										type='file'
+										accept='image/*'
 										onChange={handleEditPhotoChange}
 									/>
 								</>
 							) : (
 								<>
 									<h3 className='plantName'>{plant.name}</h3>
-									<p><strong>Последний полив: </strong>{getLastWatering(plant.wateringLog)}</p>
+									<p>
+										<strong>Последний полив: </strong>
+										{getLastWatering(plant.wateringLog)}
+									</p>
 									{plant.acquiredAt && (
 										<p>
 											<strong>Дата появления: </strong>
@@ -228,10 +367,7 @@ function App() {
 									>
 										Сохранить
 									</button>
-									<button
-										className='btn btnDelete'
-										onClick={cancelEdit}
-									>
+									<button className='btn btnDelete' onClick={cancelEdit}>
 										Отмена
 									</button>
 								</>
@@ -239,7 +375,9 @@ function App() {
 								<>
 									<button
 										className='btn btnWatering'
-										onClick={() => handleWaterPlant(plant.id)}
+										onClick={() =>
+											handleWaterPlant(plant.id, plant.wateringLog)
+										}
 									>
 										💧 Полить
 									</button>
@@ -262,10 +400,8 @@ function App() {
 				))}
 			</div>
 
-			{plants.length === 0 && (
-				<p className='startMessage'>
-					Добавьте первое растение!
-				</p>
+			{!loadingPlants && plants.length === 0 && (
+				<p className='startMessage'>Добавьте первое растение!</p>
 			)}
 		</div>
 	);

@@ -42,6 +42,8 @@
 	padding: 20px;
 	max-width: 600px;
 	margin: 0 auto;
+
+	position: relative;
 }
 
 .mainForm {
@@ -73,6 +75,13 @@
 }
 
 input.plantName {
+	flex: 1;
+	min-width: 250px;
+	padding: 10px;
+}
+
+input.inputLogin,
+input.inputPass {
 	flex: 1;
 	min-width: 250px;
 	padding: 10px;
@@ -113,8 +122,8 @@ input.plantDate {
 }
 
 .plantPhoto {
-	width: 80px;
-	height: 80px;
+	width: 100px;
+    height: 120px;
 	object-fit: cover;
 	border-radius: 5px;
 	flex-shrink: 0;
@@ -151,6 +160,14 @@ input.plantDate {
 	background: #f44336;
 }
 
+.btnLogOut {
+	background: #f44336;
+
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+
 .btnEdit {
 	background: #9c27b0;
 }
@@ -166,4 +183,25 @@ input.plantDate {
 	padding: 10px;
 	margin: 0 auto 20px;
 	display: block;
+	box-sizing: border-box;
+}
+
+.authForm {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-width: 400px;
+	margin: 20px auto;
+}
+
+.authToggle {
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	margin-top: 10px;
+}
+
+.authError {
+	color: #f44336;
+	font-size: 14px;
 }

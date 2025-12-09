@@ -23,6 +23,7 @@ yarn-error.log*
 # Твои данные растений останутся в браузере!
 
 # Секреты (если добавишь позже)
+.env
 .env.local
 .env.development.local
 .env.test.local
