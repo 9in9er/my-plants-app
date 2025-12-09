@@ -12,6 +12,7 @@ function App() {
 	const [acquiredAt, setAcquiredAt] = useState('');
 	const [editingId, setEditingId] = useState(null);
 	const [editPlant, setEditPlant] = useState(null);
+	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
 		localStorage.setItem('plants', JSON.stringify(plants));
@@ -78,13 +79,13 @@ function App() {
 
 	const handleEditPhotoChange = (e) => {
 		const file = e.target.files[0];
-		if (file) readFileAsDataUrl(file, (dataUrl) => 
+		if (file) readFileAsDataUrl(file, (dataUrl) =>
 			setEditPlant({ ...editPlant, photo: dataUrl })
 		);
 	};
 
 	const saveEditPlant = (id) => {
-		setPlants(plants.map(plant => 
+		setPlants(plants.map(plant =>
 			plant.id === id
 				? { ...plant, ...editPlant }
 				: plant
@@ -109,9 +110,21 @@ function App() {
 		return formatDate(wateringLog[wateringLog.length - 1]);
 	};
 
+	const filteredPlants = plants.filter((plant) =>
+		plant.name.toLowerCase().includes(searchQuery.toLowerCase())
+	);
+
 	return (
 		<div className='mainBlock'>
 			<h1>🌿 Мои растения</h1>
+
+			<input 
+				className='searchInput'
+				type="text" 
+				placeholder='Поиск по названию' 
+				value={searchQuery}
+				onChange={(e) => setSearchQuery(e.target.value)}
+			/>
 
 			<form className='mainForm' onSubmit={handleAddPlant}>
 				<div className='mainForm_wrap'>
@@ -150,7 +163,7 @@ function App() {
 			</form>
 
 			<div className='plantListWrap'>
-				{plants.map((plant) => (
+				{filteredPlants.map((plant) => (
 					<div className='plantWrap' key={plant.id}>
 						{(editingId === plant.id ? editPlant?.photo : plant.photo) && (
 							<img
