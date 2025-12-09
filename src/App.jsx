@@ -95,15 +95,37 @@ function App() {
 		await signOut(auth);
 	};
 
-	const readFileAsDataUrl = (file, callback) => {
+	const resizeImageTo100px = (file, callback) => {
 		const reader = new FileReader();
-		reader.onloadend = () => callback(reader.result);
+
+		reader.onload = (e) => {
+			const img = new Image();
+			img.onload = () => {
+				const MAX_WIDTH = 100;
+				const scale = MAX_WIDTH / img.width;
+				const width = MAX_WIDTH;
+				const height = img.height * scale;
+
+				const canvas = document.createElement('canvas');
+				canvas.width = width;
+				canvas.height = height;
+
+				const ctx = canvas.getContext('2d');
+				ctx.drawImage(img, 0, 0, width, height);
+
+				const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+				callback(dataUrl);
+			};
+			img.src = e.target.result;
+		};
+
 		reader.readAsDataURL(file);
-	};
+	}
 
 	const handlePhotoChange = (e) => {
 		const file = e.target.files[0];
-		if (file) readFileAsDataUrl(file, setPhoto);
+		if (!file) return;
+		resizeImageTo100px(file, setPhoto);
 	};
 
 	const handleAddPlant = async (e) => {
@@ -148,10 +170,10 @@ function App() {
 
 	const handleEditPhotoChange = (e) => {
 		const file = e.target.files[0];
-		if (file)
-			readFileAsDataUrl(file, (dataUrl) =>
-				setEditPlant({ ...editPlant, photo: dataUrl })
-			);
+		if (!file) return;
+		resizeImageTo100px(file, (dataUrl) =>
+			setEditPlant({ ...editPlant, photo: dataUrl })
+		);
 	};
 
 	const saveEditPlant = async (id) => {
