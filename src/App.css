@@ -151,6 +151,10 @@ input.plantDate {
 	background: #f44336;
 }
 
+.btnEdit {
+	background: #9c27b0;
+}
+
 .startMessage {
 	text-align: center;
 	color: #666;

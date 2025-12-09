@@ -10,20 +10,23 @@ function App() {
 	const [name, setName] = useState('');
 	const [photo, setPhoto] = useState(null);
 	const [acquiredAt, setAcquiredAt] = useState('');
+	const [editingId, setEditingId] = useState(null);
+	const [editPlant, setEditPlant] = useState(null);
 
 	useEffect(() => {
 		localStorage.setItem('plants', JSON.stringify(plants));
 	}, [plants]);
 
+
+	const readFileAsDataUrl = (file, callback) => {
+		const reader = new FileReader();
+		reader.onloadend = () => callback(reader.result);
+		reader.readAsDataURL(file);
+	}
+
 	const handlePhotoChange = (e) => {
 		const file = e.target.files[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setPhoto(reader.result);
-			};
-			reader.readAsDataURL(file);
-		}
+		if (file) readFileAsDataUrl(file, setPhoto);
 	};
 
 	const handleAddPlant = (e) => {
@@ -64,9 +67,40 @@ function App() {
 		setPlants(updatedPlants);
 	}
 
+	const startEditPlant = (plant) => {
+		setEditingId(plant.id);
+		setEditPlant({
+			name: plant.name,
+			acquiredAt: plant.acquiredAt || '',
+			photo: plant.photo || null,
+		});
+	};
+
+	const handleEditPhotoChange = (e) => {
+		const file = e.target.files[0];
+		if (file) readFileAsDataUrl(file, (dataUrl) => 
+			setEditPlant({ ...editPlant, photo: dataUrl })
+		);
+	};
+
+	const saveEditPlant = (id) => {
+		setPlants(plants.map(plant => 
+			plant.id === id
+				? { ...plant, ...editPlant }
+				: plant
+		));
+		setEditingId(null);
+		setEditPlant(null);
+	};
+
+	const cancelEdit = () => {
+		setEditingId(null);
+		setEditPlant(null);
+	};
+
 
 	const formatDate = (isoString) => {
-		return new Date(isoString).toLocaleDateString('ru-Ru');
+		return new Date(isoString).toLocaleDateString('ru-RU');
 	}
 
 
@@ -109,10 +143,7 @@ function App() {
 						accept="image/*"
 						onChange={handlePhotoChange}
 					/>
-					<button
-						className='btn btnSubmit'
-						type="submit"
-					>
+					<button className='btn btnSubmit' type="submit">
 						Добавить
 					</button>
 				</div>
@@ -120,52 +151,99 @@ function App() {
 
 			<div className='plantListWrap'>
 				{plants.map((plant) => (
-					<div
-						className='plantWrap'
-						key={plant.id}
-					>
-						{plant.photo && (
+					<div className='plantWrap' key={plant.id}>
+						{(editingId === plant.id ? editPlant?.photo : plant.photo) && (
 							<img
 								className='plantPhoto'
-								src={plant.photo}
-								alt={plant.name}
+								src={editingId === plant.id ? editPlant?.photo : plant.photo}
+								alt={editingId === plant.id ? editPlant?.name || plant.name : plant.name}
 							/>
 						)}
 
 						<div className='plantInfo'>
-							<h3 className='plantName'>{plant.name}</h3>
-							<p><strong>Последний полив: </strong>{getLastWatering(plant.wateringLog)}</p>
-							{plant.acquiredAt && (
-								<p>
-									<strong>Дата появления: </strong>
-									{new Date(plant.acquiredAt).toLocaleDateString('ru-RU')}
-								</p>
-							)}
-							{plant.wateringLog.length > 0 && (
-								<details>
-									<summary>История поливов ({plant.wateringLog.length})</summary>
-									<ul className='wateringList'>
-										{plant.wateringLog.slice(-5).map((date, index) => (
-											<li key={index}>{formatDate(date)}</li>
-										))}
-									</ul>
-								</details>
+							{editingId === plant.id ? (
+								<>
+									<input
+										className='input plantName'
+										type="text"
+										value={editPlant.name}
+										onChange={(e) => setEditPlant({ ...editPlant, name: e.target.value })}
+									/>
+									<input
+										className='plantDate'
+										type="date"
+										value={editPlant.acquiredAt}
+										onChange={(e) => setEditPlant({ ...editPlant, acquiredAt: e.target.value })}
+									/>
+									<input
+										className='fileLoad'
+										type="file"
+										accept="image/*"
+										onChange={handleEditPhotoChange}
+									/>
+								</>
+							) : (
+								<>
+									<h3 className='plantName'>{plant.name}</h3>
+									<p><strong>Последний полив: </strong>{getLastWatering(plant.wateringLog)}</p>
+									{plant.acquiredAt && (
+										<p>
+											<strong>Дата появления: </strong>
+											{new Date(plant.acquiredAt).toLocaleDateString('ru-RU')}
+										</p>
+									)}
+									{plant.wateringLog.length > 0 && (
+										<details>
+											<summary>История поливов ({plant.wateringLog.length})</summary>
+											<ul className='wateringList'>
+												{plant.wateringLog.slice(-5).map((date, index) => (
+													<li key={index}>{formatDate(date)}</li>
+												))}
+											</ul>
+										</details>
+									)}
+								</>
 							)}
 						</div>
 
 						<div className='btnsWrap'>
-							<button
-								className='btn btnWatering'
-								onClick={() => handleWaterPlant(plant.id)}
-							>
-								💧 Полить
-							</button>
-							<button
-								className='btn btnDelete'
-								onClick={() => handleDeletePlant(plant.id)}
-							>
-								🗑️ Удалить
-							</button>
+							{editingId === plant.id ? (
+								<>
+									<button
+										className='btn btnSubmit'
+										onClick={() => saveEditPlant(plant.id)}
+									>
+										Сохранить
+									</button>
+									<button
+										className='btn btnDelete'
+										onClick={cancelEdit}
+									>
+										Отмена
+									</button>
+								</>
+							) : (
+								<>
+									<button
+										className='btn btnWatering'
+										onClick={() => handleWaterPlant(plant.id)}
+									>
+										💧 Полить
+									</button>
+									<button
+										className='btn btnEdit'
+										onClick={() => startEditPlant(plant)}
+									>
+										✏️ Редактировать
+									</button>
+									<button
+										className='btn btnDelete'
+										onClick={() => handleDeletePlant(plant.id)}
+									>
+										🗑️ Удалить
+									</button>
+								</>
+							)}
 						</div>
 					</div>
 				))}
