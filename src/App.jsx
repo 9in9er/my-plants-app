@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './App.css';
 
 // Загрузка списка из localStorage или пустой массив
 function App() {
@@ -21,7 +22,7 @@ function App() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhoto(reader.result); // сохраняем base64
+        setPhoto(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -71,80 +72,61 @@ function App() {
 
   // Последний полив
   const getLastWatering = (wateringLog) => {
-    if (!wateringLog) return 'Ещё не поливали';
+    if (!wateringLog.length) return 'Ещё не поливали';
     return formatDate(wateringLog[wateringLog.length - 1]);
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <div className='mainBlock'>
       <h1>🌿 Мои растения</h1>
 
-      <form onSubmit={handleAddPlant} style={{ marginBottom: '30px' }}>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+      <form className='mainForm' onSubmit={handleAddPlant}>
+        <div className='mainForm_wrap'>
           <input
+            className='plantName'
             type="text"
             placeholder="Название растения"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ flex: 1, minWidth: '200px', padding: '10px' }}
             required
           />
           <input 
+            className='fileLoad'
             type="file" 
             accept="image/*" 
-            onChange={handlePhotoChange} 
-            style={{ padding: '10px' }}
+            onChange={handlePhotoChange}
           />
           <button 
+            className='btn btnSubmit'
             type="submit"
-            style={{
-              padding: '10px 20px',
-              background: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px'
-            }}
           >
             Добавить
           </button>
         </div>
       </form>
 
-      <div style={{ display: 'grid', gap: '20px' }}>
+      <div className='plantListWrap'>
         {plants.map((plant) => (
-          <div 
-            key={plant.id} 
-            style={{ 
-              border: '1px solid #ddd',
-              borderRadius: '10px',
-              padding: '20px',
-              display: 'flex',
-              gap: '15px',
-              alignItems: 'flex-start'
-            }}
+          <div
+            className='plantWrap' 
+            key={plant.id}
           >
             {plant.photo && (
                 <img
+                  className='plantPhoto'
                   src={plant.photo}
                   alt={plant.name}
-                  style={{ 
-                    width: '80px', 
-                    height:'80px', 
-                    objectFit: 'cover',
-                    borderRadius: '5px',
-                    flexShrink: 0
-                  }}
                 />
               )}
 
-              <div style={{ flex: 1 }}>
-                <h3 style={{ margin: '0 0 10px 0' }}>{plant.name}</h3>
-                <p><strong>Последний полив:</strong>{getLastWatering(plant.wateringLog)}</p>
+              <div className='plantInfo'>
+                <h3 className='plantName'>{plant.name}</h3>
+                <p><strong>Последний полив: </strong>{getLastWatering(plant.wateringLog)}</p>
 
                 {plant.wateringLog.length > 0 && (
                   <details>
                     <summary>История поливов ({plant.wateringLog.length})</summary>
-                    <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px' }}>
+                    <ul className='wateringList'>
                       {plant.wateringLog.slice(-5).map((date, index) => (
                         <li key={index}>{formatDate(date)}</li>
                       ))}
@@ -153,30 +135,16 @@ function App() {
                 )}
               </div>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <button
+              <div className='btnsWrap'>
+                <button 
+                  className='btn btnWatering'
                   onClick={() => handleWaterPlant(plant.id)}
-                  style={{ 
-                    padding: '8px 16px',
-                    background: '#2196F3',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer'
-                  }}
                 >
                   💧 Полить
                 </button>
                 <button
+                  className='btn btnDelete'
                   onClick={() => handleDeletePlant(plant.id)}
-                  style={{
-                    padding: '8px 16px',
-                    background: '#f44336',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer'
-                  }}
                 >
                   🗑️ Удалить
                 </button>
@@ -186,7 +154,7 @@ function App() {
       </div>
 
       {plants.length === 0 && (
-        <p style={{ textAlign: 'center', color: '#666', fontStyle: 'italic'}}>
+        <p className='startMessage'>
           Добавьте первое растение!
         </p>
       )}

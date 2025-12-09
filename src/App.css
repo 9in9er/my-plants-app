@@ -32,7 +32,105 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.mainBlock {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mainForm {
+  margin-bottom: 30px;
+}
+
+.mainForm_wrap {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+input.plantName {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px;
+}
+
+.fileLoad {
+  padding: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btnSubmit {
+  background: #4CAF50;
+}
+
+.plantListWrap {
+  display: grid;
+  gap: 20px;
+}
+
+.plantWrap {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.plantPhoto {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+.plantInfo {
+  flex: 1;
+}
+
+.plantName {
+  margin: 0 0 10px 0;
+}
+
+.wateringList {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+
+.btnsWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btnsWrap .btn {
+  padding: 8px 16px;
+}
+
+.btnWatering {
+  background: #2196F3;
+}
+
+.btnDelete {
+  background: #f44336;
+}
+
+.startMessage {
+  text-align: center;
+  color: #666;
+  font-style: italic;
 }
