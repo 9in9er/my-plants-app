@@ -1,0 +1,161 @@
+.mainBlock {
+	padding: 20px;
+	max-width: 600px;
+	margin: 0 auto;
+
+	position: relative;
+
+	input {
+
+		&.plantName,
+		&.inputLogin,
+		&.inputPass {
+			flex: 1;
+			min-width: 250px;
+			padding: 10px;
+		}
+
+		&.plantDate {
+			padding: 10px;
+		}
+	}
+
+	.mainForm {
+		margin-bottom: 30px;
+
+		.mainForm_wrap {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+
+			.nameAndDate {
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+
+				.dateLabel {
+					display: flex;
+					flex-direction: column;
+					font-size: 14px;
+				}
+
+				.nameLabel {
+					display: flex;
+					flex-direction: column;
+					font-size: 14px;
+				}
+			}
+
+			.fileLoad {
+				padding: 10px;
+			}
+		}
+	}
+
+	.authToggle {
+		display: flex;
+		gap: 10px;
+		justify-content: center;
+		margin-top: 10px;
+	}
+
+	.startMessage {
+		text-align: center;
+		color: #666;
+		font-style: italic;
+	}
+
+	.searchInput {
+		width: 100%;
+		padding: 10px;
+		margin: 0 auto 20px;
+		display: block;
+		box-sizing: border-box;
+	}
+}
+
+.btn {
+	padding: 10px 20px;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+
+	&.btnSubmit {
+		background: #4CAF50;
+	}
+
+	&.btnWatering {
+		background: #2196F3;
+	}
+
+	&.btnDelete {
+		background: #f44336;
+	}
+
+	&.btnEdit {
+		background: #9c27b0;
+	}
+
+	&.btnLogOut {
+		background: #f44336;
+
+		position: absolute;
+		top: 20px;
+		right: 20px;
+	}
+}
+
+.plantListWrap {
+	display: grid;
+	gap: 20px;
+
+	.plantWrap {
+		border: 1px solid #ddd;
+		border-radius: 10px;
+		padding: 20px;
+		display: flex;
+		gap: 15px;
+		align-items: flex-start;
+
+		.plantPhoto {
+			width: 100px;
+			height: 120px;
+			object-fit: cover;
+			border-radius: 5px;
+			flex-shrink: 0;
+		}
+
+		.plantInfo {
+			flex: 1;
+
+			.plantName {
+				margin: 0 0 10px 0;
+			}
+
+			.wateringList {
+				margin: 10px 0 0 0;
+				padding-left: 20px;
+			}
+		}
+
+		.btnsWrap {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+	}
+}
+
+.authForm {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-width: 400px;
+	margin: 20px auto;
+
+	.authError {
+		color: #f44336;
+		font-size: 14px;
+	}
+}
