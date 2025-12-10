@@ -7,6 +7,7 @@ function PlantForm({
     onDateChange,
     onPhotoChange,
     onSubmit,
+    onCancel,
 }) {
     return (
         <form className='mainForm' onSubmit={onSubmit}>
@@ -39,8 +40,18 @@ function PlantForm({
                     accept='image/*'
                     onChange={onPhotoChange}
                 />
+            </div>
+
+            <div className='modalButtons'>
                 <button className='btn btnSubmit' type='submit'>
-                    Добавить
+                    Сохранить
+                </button>
+                <button
+                    className='btn btnDelete'
+                    type='button'
+                    onClick={onCancel}
+                >
+                    Отмена
                 </button>
             </div>
         </form>

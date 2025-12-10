@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+
 import { db } from './firebase';
 import {
 	collection,
@@ -9,9 +11,6 @@ import {
 	updateDoc,
 	deleteDoc,
 } from 'firebase/firestore';
-
-import React, { useEffect, useState } from 'react';
-import './App.scss';
 import { auth } from './firebase';
 import {
 	createUserWithEmailAndPassword,
@@ -20,11 +19,18 @@ import {
 	onAuthStateChanged,
 } from 'firebase/auth';
 
+import './App.scss';
 import AuthScreen from './AuthScreen';
 import PlantForm from './PlantForm';
 import PlantCard from './PlantCard';
 
 function App() {
+	const [user, setUser] = useState(null);
+	const [authMode, setAuthMode] = useState('login');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [authError, setAuthError] = useState('');
+
 	const [plants, setPlants] = useState([]);
 	const [loadingPlants, setLoadingPlants] = useState(true);
 
@@ -35,11 +41,7 @@ function App() {
 	const [editPlant, setEditPlant] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const [user, setUser] = useState(null);
-	const [authMode, setAuthMode] = useState('login');
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [authError, setAuthError] = useState('');
+	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 	useEffect(() => {
 		if (!user) {
@@ -244,38 +246,56 @@ function App() {
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>
 
-			<PlantForm
-				name={name}
-				acquiredAt={acquiredAt}
-				onNameChange={setName}
-				onDateChange={setAcquiredAt}
-				onPhotoChange={handlePhotoChange}
-				onSubmit={handleAddPlant}
-			/>
+			{isAddModalOpen && (
+				<div className='modalOverlay' onClick={() => setIsAddModalOpen(false)}>
+					<div className='modal' onClick={(e) => e.stopPropagation()}>
+					<h2>Добавить растение</h2>
+
+					<PlantForm
+						name={name}
+						acquiredAt={acquiredAt}
+						onNameChange={setName}
+						onDateChange={setAcquiredAt}
+						onPhotoChange={handlePhotoChange}
+						onSubmit={(e) => {
+						handleAddPlant(e);
+						setIsAddModalOpen(false);
+						}}
+						onCancel={() => setIsAddModalOpen(false)}
+					/>
+					</div>
+				</div>
+			)}
 
 			{loadingPlants && (
 				<p className='startMessage'>Загружаем ваши растения…</p>
 			)}
 
+			<button
+				className='btn btnSubmit'
+				type='button'
+				onClick={() => setIsAddModalOpen(true)}
+			>
+				Добавить растение
+			</button>
+
 			<div className='plantListWrap'>
-				<div className='plantListWrap'>
-					{filteredPlants.map((plant) => (
-						<PlantCard
-							key={plant.id}
-							plant={plant}
-							editingId={editingId}
-							editPlant={editPlant}
-							startEditPlant={startEditPlant}
-							saveEditPlant={saveEditPlant}
-							cancelEdit={cancelEdit}
-							handleWaterPlant={handleWaterPlant}
-							handleEditPhotoChange={handleEditPhotoChange}
-							handleDeletePlant={handleDeletePlant}  // ← добавить
-							formatDate={formatDate}
-							getLastWatering={getLastWatering}
-						/>
-					))}
-				</div>
+				{filteredPlants.map((plant) => (
+					<PlantCard
+						key={plant.id}
+						plant={plant}
+						editingId={editingId}
+						editPlant={editPlant}
+						startEditPlant={startEditPlant}
+						saveEditPlant={saveEditPlant}
+						cancelEdit={cancelEdit}
+						handleWaterPlant={handleWaterPlant}
+						handleEditPhotoChange={handleEditPhotoChange}
+						handleDeletePlant={handleDeletePlant}  // ← добавить
+						formatDate={formatDate}
+						getLastWatering={getLastWatering}
+					/>
+				))}
 			</div>
 
 			{!loadingPlants && plants.length === 0 && (
