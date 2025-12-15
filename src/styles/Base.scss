@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+$sunflowerColor: #ffc312;
+$radiantYellowColor: #f79f1f;
+$puffinsBillColor: #ee5a24;
+$redPigmentColor: #ea2027;
+$energosColor: #c4e538;
+$androidGreenColor: #a3cb38;
+$pixelatedGrassColor: #009432;
+$turkishAquaColor: #006266;
+$blueMartinaColor: #12cbc4;
+$mediterraneanSeaColor: #1289a7;
+$merchantMarineBlueColor: #0652dd;
+$leaguesUnderTheSeaColor: #1b1464;
+$lavenderRoseColor: #fda7df;
+$lavenderTeaColor: #d980fa;
+$forgottenPurpleColor: #9980fa;
+$circumorbitalRingColor: #5758bb;
+$baraRedColor: #ed4c67;
+$veryBerryColor: #b53471;
+$hollyhockColor: #833471;
+$magentaPurpleColor: #6f1e51;
+
+$borderColor: #ddd;
+$grayTextColor: #666;
+
+body {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 14px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}
+
+.appTitle {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &.btnSubmit {
+    background: $pixelatedGrassColor;
+  }
+
+  &.btnWatering {
+    background: $merchantMarineBlueColor;
+  }
+
+  &.btnDelete {
+    background: $redPigmentColor;
+  }
+
+  &.btnEdit {
+    background: $radiantYellowColor;
+  }
+
+  &.btnLogOut {
+    background: $redPigmentColor;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+}

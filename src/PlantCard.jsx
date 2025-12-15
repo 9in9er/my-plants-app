@@ -1,4 +1,6 @@
-import React from "react";
+import React from 'react';
+import './styles/Components.scss';
+import './styles/PlantCard.scss';
 
 function PlantCard({
   plant,
@@ -25,31 +27,32 @@ function PlantCard({
     <div className='plantWrap'>
       <div className='plantInfo'>
         {isEditing ? (
-          <>
-
-            <div className='nameAndDate'>
-              <label className='nameLabel'>
-                Название растения
-                <input
-                  className='input inputPlantName'
-                  type='text'
-                  value={editPlant.name}
-                  onChange={(e) =>
-                    startEditPlant({ ...plant, name: e.target.value })
-                  }
-                />
-              </label>
-              <label className='dateLabel'>
-                Дата появления
-                <input
-                  className='plantDate'
-                  type='date'
-                  value={editPlant.acquiredAt}
-                  onChange={(e) =>
-                    startEditPlant({ ...plant, acquiredAt: e.target.value })
-                  }
-                />
-              </label>
+          <div className='mainForm'>
+            <div className='mainForm_wrap'>
+              <div className='nameAndDate'>
+                <label className='nameLabel'>
+                  Название растения
+                  <input
+                    className='input inputPlantName'
+                    type='text'
+                    value={editPlant.name}
+                    onChange={(e) =>
+                      startEditPlant({ ...plant, name: e.target.value })
+                    }
+                  />
+                </label>
+                <label className='dateLabel'>
+                  Дата появления
+                  <input
+                    className='plantDate'
+                    type='date'
+                    value={editPlant.acquiredAt}
+                    onChange={(e) =>
+                      startEditPlant({ ...plant, acquiredAt: e.target.value })
+                    }
+                  />
+                </label>
+              </div>
 
               <input
                 className='fileLoad'
@@ -58,14 +61,14 @@ function PlantCard({
                 onChange={handleEditPhotoChange}
               />
             </div>
-          </>
+          </div>
         ) : (
           <>
             <h3 className='plantName'>{plant.name}</h3>
-            <div className="aboutPlant">
-              <div className="photoInfo">
+            <div className='aboutPlant'>
+              <div className='photoInfo'>
                 {plant.acquiredAt && (
-                  <p className="dateOfAppearance">
+                  <p className='dateOfAppearance'>
                     <strong>Дата появления: </strong>
                     {new Date(plant.acquiredAt).toLocaleDateString('ru-RU')}
                   </p>
@@ -79,7 +82,7 @@ function PlantCard({
                   />
                 )}
               </div>
-              <div className="textInfos">
+              <div className='textInfos'>
                 <p>
                   <strong>Последний полив: </strong>
                   {getLastWatering(log)}
@@ -98,20 +101,20 @@ function PlantCard({
 
                 <hr />
 
-                <div className="notesBlock">
+                <div className='notesBlock'>
                   <h4>Заметки</h4>
 
-                  <div className="notesAdd">
+                  <div className='notesAdd'>
                     <input
-                      className="input notesInput"
-                      type="text"
-                      placeholder="Новая заметка..."
+                      className='input notesInput'
+                      type='text'
+                      placeholder='Новая заметка...'
                       value={noteText}
                       onChange={(e) => changeNoteText(plant.id, e.target.value)}
                     />
                     <button
-                      className="btn btnSubmit"
-                      type="button"
+                      className='btn btnSubmit'
+                      type='button'
                       onClick={() => {
                         addNoteToPlant(plant.id, notes, noteText);
                         changeNoteText(plant.id, '');
@@ -121,27 +124,33 @@ function PlantCard({
                     </button>
                   </div>
 
-                  {notes.length === 0 && <p className="notesEmpty">Пока нет заметок.</p>}
+                  {notes.length === 0 && (
+                    <p className='notesEmpty'>Пока нет заметок.</p>
+                  )}
 
                   {notes.length > 0 && (
                     <>
-                      <ul className="notesList">
+                      <ul className='notesList'>
                         {notes.slice(-3).map((note) => (
-                          <li key={note.id} className="notesItem">
+                          <li key={note.id} className='notesItem'>
                             <div>
-                              <div className="notesText">{note.text}</div>
-                              <div className="notesDate">
+                              <div className='notesText'>{note.text}</div>
+                              <div className='notesDate'>
                                 {formatDate(note.createdAt)}{' '}
-                                {new Date(note.createdAt).toLocaleTimeString('ru-RU', {
+                                {new Date(
+                                  note.createdAt
+                                ).toLocaleTimeString('ru-RU', {
                                   hour: '2-digit',
                                   minute: '2-digit',
                                 })}
                               </div>
                             </div>
                             <button
-                              className="btn btnDelete"
-                              type="button"
-                              onClick={() => deleteNoteFromPlant(plant.id, notes, note.id)}
+                              className='btn btnDelete'
+                              type='button'
+                              onClick={() =>
+                                deleteNoteFromPlant(plant.id, notes, note.id)
+                              }
                             >
                               ✖
                             </button>
@@ -149,26 +158,36 @@ function PlantCard({
                         ))}
                       </ul>
                       {notes.length > 3 && (
-                        <details className="notesMore">
-                          <summary>Показать все заметки ({notes.length - 3})</summary>
+                        <details className='notesMore'>
+                          <summary>
+                            Показать все заметки ({notes.length - 3})
+                          </summary>
 
-                          <ul className="notesList">
-                            {notes.slice(-3).map((note) => (
-                              <li key={note.id} className="notesItem">
+                          <ul className='notesList'>
+                            {notes.slice(0, -3).map((note) => (
+                              <li key={note.id} className='notesItem'>
                                 <div>
-                                  <div className="notesText">{note.text}</div>
-                                  <div className="notesDate">
+                                  <div className='notesText'>{note.text}</div>
+                                  <div className='notesDate'>
                                     {formatDate(note.createdAt)}{' '}
-                                    {new Date(note.createdAt).toLocaleTimeString('ru-RU', {
+                                    {new Date(
+                                      note.createdAt
+                                    ).toLocaleTimeString('ru-RU', {
                                       hour: '2-digit',
                                       minute: '2-digit',
                                     })}
                                   </div>
                                 </div>
                                 <button
-                                  className="btn btnDelete"
-                                  type="button"
-                                  onClick={() => deleteNoteFromPlant(plant.id, notes, note.id)}
+                                  className='btn btnDelete'
+                                  type='button'
+                                  onClick={() =>
+                                    deleteNoteFromPlant(
+                                      plant.id,
+                                      notes,
+                                      note.id
+                                    )
+                                  }
                                 >
                                   ✖
                                 </button>

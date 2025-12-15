@@ -1,0 +1,26 @@
+@import './Base.scss';
+
+.authToggle {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: 20px auto;
+
+  .authError {
+    color: $redPigmentColor;
+    font-size: 14px;
+  }
+
+  .inputLogin,
+  .inputPass {
+    padding: 10px;
+  }
+}

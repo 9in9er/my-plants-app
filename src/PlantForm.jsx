@@ -1,4 +1,6 @@
 import React from 'react';
+import './styles/Components.scss';
+import './styles/PlantForm.scss';
 
 function PlantForm({
   name,

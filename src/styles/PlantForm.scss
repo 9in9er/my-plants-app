@@ -1,0 +1,33 @@
+@import './Base.scss';
+
+.mainForm {
+  .mainForm_wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .nameAndDate {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .dateLabel,
+      .nameLabel {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  .modalButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+}
+
+.inputPlantName,
+.plantDate {
+  padding: 10px;
+}
