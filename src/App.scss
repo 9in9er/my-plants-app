@@ -1,6 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+body {
+	font-family: "PT Sans", sans-serif;
+}
+
+.appTitle {
+	margin-top: 0;
+}
+
 .mainBlock {
 	padding: 20px;
-	max-width: 600px;
+	max-width: 700px;
 	margin: 0 auto;
 
 	position: relative;
@@ -101,7 +111,7 @@
 	}
 
 	&.btnEdit {
-		background: #9c27b0;
+		background: #c5a53a;
 	}
 
 	&.btnLogOut {
@@ -144,6 +154,63 @@
 			.wateringList {
 				margin: 10px 0 0 0;
 				padding-left: 20px;
+			}
+		}
+
+
+		.notesBlock {
+			margin-top: 12px;
+			margin-bottom: 12px;
+
+			h4 {
+				margin: 0 0 6px 0;
+				font-size: 14px;
+			}
+
+			.notesEmpty {
+				font-size: 13px;
+				color: #777;
+			}
+
+			.notesList {
+				list-style: none;
+				padding-left: 0;
+				margin: 0 0 8px 0;
+
+				.notesItem {
+					display: flex;
+					justify-content: space-between;
+					align-items: flex-start;
+					gap: 8px;
+					margin-bottom: 4px;
+
+					.notesText {
+						font-size: 14px;
+					}
+
+					.notesDate {
+						font-size: 11px;
+						color: #888;
+					}
+
+					.btn.btnDelete {
+						padding: 4px 8px;
+					}
+				}
+			}
+
+			.notesAdd {
+				display: flex;
+				gap: 8px;
+
+				.notesInput {
+					flex: 1;
+					padding: 6px 8px;
+				}
+
+				.btnSubmit {
+					padding: 6px 10px;
+				}
 			}
 		}
 

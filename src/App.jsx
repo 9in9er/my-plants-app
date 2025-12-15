@@ -43,6 +43,8 @@ function App() {
 
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
+	const [noteTextByPlant, setNoteTextByPlant] = useState({});
+
 	useEffect(() => {
 		if (!user) {
 			setPlants([]);
@@ -131,12 +133,6 @@ function App() {
 		reader.readAsDataURL(file);
 	}
 
-	const handlePhotoChange = (e) => {
-		const file = e.target.files[0];
-		if (!file) return;
-		resizeImageTo100px(file, setPhoto);
-	};
-
 	const handleAddPlant = async (e) => {
 		e.preventDefault();
 		if (name.trim() === '' || !user) return;
@@ -146,6 +142,7 @@ function App() {
 			photo,
 			acquiredAt,
 			wateringLog: [],
+			notes: [],
 			userId: user.uid,
 			createdAt: new Date().toISOString(),
 		};
@@ -167,6 +164,37 @@ function App() {
 		const plantRef = doc(db, 'plants', id);
 		await updateDoc(plantRef, { wateringLog: newLog });
 	};
+	
+	const handlePhotoChange = (e) => {
+		const file = e.target.files[0];
+		if (!file) return;
+		resizeImageTo100px(file, setPhoto);
+	};
+
+	const addNoteToPlant = async (plantId, currentNotes, text) => {
+		if (!text.trim()) return;
+
+		const newNote = {
+			id: Date.now().toString(),
+			text,
+			createdAt: new Date().toISOString(),
+		};
+
+		const plantRef = doc(db, 'plants', plantId);
+		const updatedNotes = [...(currentNotes || []), newNote];
+
+		await updateDoc(plantRef, { notes: updatedNotes });
+	};
+
+	const deleteNoteFromPlant = async (plantId, currentNotes, noteId) => {
+		const updatedNotes = (currentNotes || []).filter((note) => note.id !== noteId);
+		const plantRef = doc(db, 'plants', plantId);
+		await updateDoc(plantRef, { notes: updatedNotes });
+	};
+
+	const changeNoteText = (plantId, value) => {
+		setNoteTextByPlant((prev) => ({ ...prev, [plantId]: value }));
+	}
 
 	const startEditPlant = (plant) => {
 		setEditingId(plant.id);
@@ -232,7 +260,7 @@ function App() {
 	}
 	return (
 		<div className='mainBlock'>
-			<h1>🌿 Мои растения</h1>
+			<h1 className='appTitle'>🌿 Мои растения</h1>
 
 			<button className='btn btnLogOut' onClick={handleLogout}>
 				Выйти
@@ -249,20 +277,20 @@ function App() {
 			{isAddModalOpen && (
 				<div className='modalOverlay' onClick={() => setIsAddModalOpen(false)}>
 					<div className='modal' onClick={(e) => e.stopPropagation()}>
-					<h2>Добавить растение</h2>
+						<h2>Добавить растение</h2>
 
-					<PlantForm
-						name={name}
-						acquiredAt={acquiredAt}
-						onNameChange={setName}
-						onDateChange={setAcquiredAt}
-						onPhotoChange={handlePhotoChange}
-						onSubmit={(e) => {
-						handleAddPlant(e);
-						setIsAddModalOpen(false);
-						}}
-						onCancel={() => setIsAddModalOpen(false)}
-					/>
+						<PlantForm
+							name={name}
+							acquiredAt={acquiredAt}
+							onNameChange={setName}
+							onDateChange={setAcquiredAt}
+							onPhotoChange={handlePhotoChange}
+							onSubmit={(e) => {
+								handleAddPlant(e);
+								setIsAddModalOpen(false);
+							}}
+							onCancel={() => setIsAddModalOpen(false)}
+						/>
 					</div>
 				</div>
 			)}
@@ -291,9 +319,13 @@ function App() {
 						cancelEdit={cancelEdit}
 						handleWaterPlant={handleWaterPlant}
 						handleEditPhotoChange={handleEditPhotoChange}
-						handleDeletePlant={handleDeletePlant}  // ← добавить
+						handleDeletePlant={handleDeletePlant}
 						formatDate={formatDate}
 						getLastWatering={getLastWatering}
+						addNoteToPlant={addNoteToPlant}
+						deleteNoteFromPlant={deleteNoteFromPlant}
+						noteText={noteTextByPlant[plant.id] || ''}
+						changeNoteText={changeNoteText}
 					/>
 				))}
 			</div>
