@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react';
 
 import { db } from './firebase';
 import {
-	collection,
-	addDoc,
-	query,
-	where,
-	onSnapshot,
-	doc,
-	updateDoc,
-	deleteDoc,
+  collection,
+  addDoc,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { auth } from './firebase';
 import {
-	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword,
-	signOut,
-	onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
 } from 'firebase/auth';
 
 import './App.scss';
@@ -25,316 +25,356 @@ import PlantForm from './PlantForm';
 import PlantCard from './PlantCard';
 
 function App() {
-	const [user, setUser] = useState(null);
-	const [authMode, setAuthMode] = useState('login');
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [authError, setAuthError] = useState('');
+  const [user, setUser] = useState(null);
+  const [authMode, setAuthMode] = useState('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [authError, setAuthError] = useState('');
 
-	const [plants, setPlants] = useState([]);
-	const [loadingPlants, setLoadingPlants] = useState(true);
+  const [plants, setPlants] = useState([]);
+  const [loadingPlants, setLoadingPlants] = useState(true);
 
-	const [name, setName] = useState('');
-	const [photo, setPhoto] = useState(null);
-	const [acquiredAt, setAcquiredAt] = useState('');
-	const [editingId, setEditingId] = useState(null);
-	const [editPlant, setEditPlant] = useState(null);
-	const [searchQuery, setSearchQuery] = useState('');
+  const [name, setName] = useState('');
+  const [photo, setPhoto] = useState(null);
+  const [acquiredAt, setAcquiredAt] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [editPlant, setEditPlant] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortMode, setSortMode] = useState(
+    () => localStorage.getItem('plantsSortMode') || 'date'
+  );
 
-	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-	const [noteTextByPlant, setNoteTextByPlant] = useState({});
+  const [noteTextByPlant, setNoteTextByPlant] = useState({});
 
-	useEffect(() => {
-		if (!user) {
-			setPlants([]);
-			setLoadingPlants(false);
-			return;
-		}
+  useEffect(() => {
+    if (!user) {
+      setPlants([]);
+      setLoadingPlants(false);
+      return;
+    }
 
-		setLoadingPlants(true);
+    setLoadingPlants(true);
 
-		const plantsRef = collection(db, 'plants');
-		const q = query(plantsRef, where('userId', '==', user.uid));
+    const plantsRef = collection(db, 'plants');
+    const q = query(plantsRef, where('userId', '==', user.uid));
 
-		const unsubscribe = onSnapshot(q, (snapshot) => {
-			const data = snapshot.docs.map((docSnap) => ({
-				id: docSnap.id,
-				...docSnap.data(),
-			}));
-			setPlants(data);
-			setLoadingPlants(false);
-		});
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+      }));
+      setPlants(data);
+      setLoadingPlants(false);
+    });
 
-		return () => unsubscribe();
-	}, [user]);
+    return () => unsubscribe();
+  }, [user]);
 
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-			setUser(firebaseUser || null);
-		});
-		return () => unsubscribe();
-	}, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser || null);
+    });
+    return () => unsubscribe();
+  }, []);
 
-	const handleRegister = async (e) => {
-		e.preventDefault();
-		setAuthError('');
-		try {
-			await createUserWithEmailAndPassword(auth, email, password);
-			setEmail('');
-			setPassword('');
-		} catch (err) {
-			setAuthError(err.message);
-		}
-	};
+  useEffect(() => {
+    localStorage.setItem('plantsSortMode', sortMode);
+  }, [sortMode]);
 
-	const handleLogin = async (e) => {
-		e.preventDefault();
-		setAuthError('');
-		try {
-			await signInWithEmailAndPassword(auth, email, password);
-			setEmail('');
-			setPassword('');
-		} catch (err) {
-			setAuthError(err.message);
-		}
-	};
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      setEmail('');
+      setPassword('');
+    } catch (err) {
+      setAuthError(err.message);
+    }
+  };
 
-	const handleLogout = async () => {
-		await signOut(auth);
-	};
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setEmail('');
+      setPassword('');
+    } catch (err) {
+      setAuthError(err.message);
+    }
+  };
 
-	const resizeImageTo150px = (file, callback) => {
-		const reader = new FileReader();
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
 
-		reader.onload = (e) => {
-			const img = new Image();
-			img.onload = () => {
-				const MAX_WIDTH = 150;
-				const scale = MAX_WIDTH / img.width;
-				const width = MAX_WIDTH;
-				const height = img.height * scale;
+  const resizeImageTo150px = (file, callback) => {
+    const reader = new FileReader();
 
-				if (!img.width) return;
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX_WIDTH = 150;
+        const scale = MAX_WIDTH / img.width;
+        const width = MAX_WIDTH;
+        const height = img.height * scale;
 
-				const canvas = document.createElement('canvas');
-				canvas.width = width;
-				canvas.height = height;
+        if (!img.width) return;
 
-				const ctx = canvas.getContext('2d');
-				ctx.drawImage(img, 0, 0, width, height);
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
 
-				const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-				callback(dataUrl);
-			};
-			img.src = e.target.result;
-		};
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
 
-		reader.readAsDataURL(file);
-	}
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        callback(dataUrl);
+      };
+      img.src = e.target.result;
+    };
 
-	const handleAddPlant = async (e) => {
-		e.preventDefault();
-		if (name.trim() === '' || !user) return;
+    reader.readAsDataURL(file);
+  }
 
-		const newPlant = {
-			name,
-			photo,
-			acquiredAt,
-			wateringLog: [],
-			notes: [],
-			userId: user.uid,
-			createdAt: new Date().toISOString(),
-		};
+  const handleAddPlant = async (e) => {
+    e.preventDefault();
+    if (name.trim() === '' || !user) return;
 
-		await addDoc(collection(db, 'plants'), newPlant);
+    const newPlant = {
+      name,
+      photo,
+      acquiredAt,
+      wateringLog: [],
+      notes: [],
+      userId: user.uid,
+      createdAt: new Date().toISOString(),
+    };
 
-		setName('');
-		setPhoto(null);
-		setAcquiredAt('');
-		e.target.reset();
-	};
+    await addDoc(collection(db, 'plants'), newPlant);
 
-	const handleDeletePlant = async (id) => {
-		await deleteDoc(doc(db, 'plants', id));
-	};
+    setName('');
+    setPhoto(null);
+    setAcquiredAt('');
+    e.target.reset();
+  };
 
-	const handleWaterPlant = async (id, wateringLog) => {
-		const newLog = [...(wateringLog || []), new Date().toISOString()];
-		const plantRef = doc(db, 'plants', id);
-		await updateDoc(plantRef, { wateringLog: newLog });
-	};
-	
-	const handlePhotoChange = (e) => {
-		const file = e.target.files[0];
-		if (!file) return;
-		resizeImageTo150px(file, setPhoto);
-	};
+  const handleDeletePlant = async (id) => {
+    await deleteDoc(doc(db, 'plants', id));
+  };
 
-	const addNoteToPlant = async (plantId, currentNotes, text) => {
-		if (!text.trim()) return;
+  const handleWaterPlant = async (id, wateringLog) => {
+    const prevLog = Array.isArray(wateringLog) ? wateringLog : [];
+    const newEntry = new Date().toISOString();
 
-		const newNote = {
-			id: Date.now().toString(),
-			text,
-			createdAt: new Date().toISOString(),
-		};
+    const extendedLog = [...prevLog, newEntry];
 
-		const plantRef = doc(db, 'plants', plantId);
-		const updatedNotes = [...(currentNotes || []), newNote];
+    const limitedLog =
+      extendedLog.length > 10
+        ? extendedLog.slice(extendedLog.length - 10)
+        : extendedLog;
 
-		await updateDoc(plantRef, { notes: updatedNotes });
-	};
+    const plantRef = doc(db, 'plants', id);
+    await updateDoc(plantRef, { wateringLog: limitedLog });
+  };
 
-	const deleteNoteFromPlant = async (plantId, currentNotes, noteId) => {
-		const updatedNotes = (currentNotes || []).filter((note) => note.id !== noteId);
-		const plantRef = doc(db, 'plants', plantId);
-		await updateDoc(plantRef, { notes: updatedNotes });
-	};
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    resizeImageTo150px(file, setPhoto);
+  };
 
-	const changeNoteText = (plantId, value) => {
-		setNoteTextByPlant((prev) => ({ ...prev, [plantId]: value }));
-	}
+  const addNoteToPlant = async (plantId, currentNotes, text) => {
+    if (!text.trim()) return;
 
-	const startEditPlant = (plant) => {
-		setEditingId(plant.id);
-		setEditPlant({
-			name: plant.name,
-			acquiredAt: plant.acquiredAt || '',
-			photo: plant.photo || null,
-		});
-	};
+    const newNote = {
+      id: Date.now().toString(),
+      text,
+      createdAt: new Date().toISOString(),
+    };
 
-	const handleEditPhotoChange = (e) => {
-		const file = e.target.files[0];
-		if (!file) return;
-		resizeImageTo150px(file, (dataUrl) =>
-			setEditPlant({ ...editPlant, photo: dataUrl })
-		);
-	};
+    const plantRef = doc(db, 'plants', plantId);
+    const updatedNotes = [...(currentNotes || []), newNote];
 
-	const saveEditPlant = async (id) => {
-		const plantRef = doc(db, 'plants', id);
-		await updateDoc(plantRef, {
-			name: editPlant.name,
-			acquiredAt: editPlant.acquiredAt,
-			photo: editPlant.photo,
-		});
+    await updateDoc(plantRef, { notes: updatedNotes });
+  };
 
-		setEditingId(null);
-		setEditPlant(null);
-	};
+  const deleteNoteFromPlant = async (plantId, currentNotes, noteId) => {
+    const updatedNotes = (currentNotes || []).filter((note) => note.id !== noteId);
+    const plantRef = doc(db, 'plants', plantId);
+    await updateDoc(plantRef, { notes: updatedNotes });
+  };
 
-	const cancelEdit = () => {
-		setEditingId(null);
-		setEditPlant(null);
-	};
+  const changeNoteText = (plantId, value) => {
+    setNoteTextByPlant((prev) => ({ ...prev, [plantId]: value }));
+  }
 
-	const formatDate = (isoString) => {
-		return new Date(isoString).toLocaleDateString('ru-RU');
-	};
+  const startEditPlant = (plant) => {
+    setEditingId(plant.id);
+    setEditPlant({
+      name: plant.name,
+      acquiredAt: plant.acquiredAt || '',
+      photo: plant.photo || null,
+    });
+  };
 
-	const getLastWatering = (wateringLog) => {
-		if (!wateringLog.length) return 'Ещё не поливали';
-		return formatDate(wateringLog[wateringLog.length - 1]);
-	};
+  const handleEditPhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    resizeImageTo150px(file, (dataUrl) =>
+      setEditPlant({ ...editPlant, photo: dataUrl })
+    );
+  };
 
-	const filteredPlants = plants.filter((plant) =>
-		(plant.name || '').toLowerCase().includes(searchQuery.toLowerCase())
-	);
+  const saveEditPlant = async (id) => {
+    const plantRef = doc(db, 'plants', id);
+    await updateDoc(plantRef, {
+      name: editPlant.name,
+      acquiredAt: editPlant.acquiredAt,
+      photo: editPlant.photo,
+    });
 
-	if (!user) {
-		return (
-			<AuthScreen
-				authMode={authMode}
-				setAuthMode={setAuthMode}
-				email={email}
-				password={password}
-				setEmail={setEmail}
-				setPassword={setPassword}
-				authError={authError}
-				handleLogin={handleLogin}
-				handleRegister={handleRegister}
-			/>
-		);
-	}
-	return (
-		<div className='mainBlock'>
-			<h1 className='appTitle'>🌿 Мои растения</h1>
+    setEditingId(null);
+    setEditPlant(null);
+  };
 
-			<button className='btn btnLogOut' onClick={handleLogout}>
-				Выйти
-			</button>
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditPlant(null);
+  };
 
-			<input
-				className='searchInput'
-				type='text'
-				placeholder='Поиск по названию'
-				value={searchQuery}
-				onChange={(e) => setSearchQuery(e.target.value)}
-			/>
+  const formatDate = (isoString) => {
+    return new Date(isoString).toLocaleDateString('ru-RU');
+  };
 
-			{isAddModalOpen && (
-				<div className='modalOverlay' onClick={() => setIsAddModalOpen(false)}>
-					<div className='modal' onClick={(e) => e.stopPropagation()}>
-						<h2>Добавить растение</h2>
+  const getLastWatering = (wateringLog) => {
+    if (!wateringLog.length) return 'Ещё не поливали';
+    return formatDate(wateringLog[wateringLog.length - 1]);
+  };
 
-						<PlantForm
-							name={name}
-							acquiredAt={acquiredAt}
-							onNameChange={setName}
-							onDateChange={setAcquiredAt}
-							onPhotoChange={handlePhotoChange}
-							onSubmit={(e) => {
-								handleAddPlant(e);
-								setIsAddModalOpen(false);
-							}}
-							onCancel={() => setIsAddModalOpen(false)}
-						/>
-					</div>
-				</div>
-			)}
+  const filteredPlants = plants.filter((plant) =>
+    (plant.name || '').toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-			{loadingPlants && (
-				<p className='startMessage'>Загружаем ваши растения…</p>
-			)}
+  const sortedPlants = [...filteredPlants].sort((a, b) => {
+    if (sortMode === 'name') {
+      return a.name.localeCompare(b.name, 'ru', { sensitivity: 'base' });
+    }
 
-			<button
-				className='btn btnSubmit'
-				type='button'
-				onClick={() => setIsAddModalOpen(true)}
-			>
-				Добавить растение
-			</button>
+    const aDate = a.createdAt || a.acquiredAt || '';
+    const bDate = b.createdAt || b.acquiredAt || '';
+    return (bDate || '').localeCompare(aDate || '');
+  })
 
-			<div className='plantListWrap'>
-				{filteredPlants.map((plant) => (
-					<PlantCard
-						key={plant.id}
-						plant={plant}
-						editingId={editingId}
-						editPlant={editPlant}
-						startEditPlant={startEditPlant}
-						saveEditPlant={saveEditPlant}
-						cancelEdit={cancelEdit}
-						handleWaterPlant={handleWaterPlant}
-						handleEditPhotoChange={handleEditPhotoChange}
-						handleDeletePlant={handleDeletePlant}
-						formatDate={formatDate}
-						getLastWatering={getLastWatering}
-						addNoteToPlant={addNoteToPlant}
-						deleteNoteFromPlant={deleteNoteFromPlant}
-						noteText={noteTextByPlant[plant.id] || ''}
-						changeNoteText={changeNoteText}
-					/>
-				))}
-			</div>
+  if (!user) {
+    return (
+      <AuthScreen
+        authMode={authMode}
+        setAuthMode={setAuthMode}
+        email={email}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        authError={authError}
+        handleLogin={handleLogin}
+        handleRegister={handleRegister}
+      />
+    );
+  }
+  return (
+    <div className='mainBlock'>
+      <h1 className='appTitle'>🌿 Мои растения</h1>
 
-			{!loadingPlants && plants.length === 0 && (
-				<p className='startMessage'>Добавьте первое растение!</p>
-			)}
-		</div>
-	);
+      <button className='btn btnLogOut' onClick={handleLogout}>
+        Выйти
+      </button>
+
+      <input
+        className='searchInput'
+        type='text'
+        placeholder='Поиск по названию'
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+
+      {isAddModalOpen && (
+        <div className='modalOverlay' onClick={() => setIsAddModalOpen(false)}>
+          <div className='modal' onClick={(e) => e.stopPropagation()}>
+            <h2>Добавить растение</h2>
+
+            <PlantForm
+              name={name}
+              acquiredAt={acquiredAt}
+              onNameChange={setName}
+              onDateChange={setAcquiredAt}
+              onPhotoChange={handlePhotoChange}
+              onSubmit={(e) => {
+                handleAddPlant(e);
+                setIsAddModalOpen(false);
+              }}
+              onCancel={() => setIsAddModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {loadingPlants && (
+        <p className='startMessage'>Загружаем ваши растения…</p>
+      )}
+
+      <div className='topBar'>
+        <button
+          className='btn btnSubmit'
+          type='button'
+          onClick={() => setIsAddModalOpen(true)}
+        >
+          Добавить растение
+        </button>
+        <div className='sortControls'>
+          <label>
+            Сортировать по:{' '}
+            <select
+              value={sortMode}
+              onChange={(e) => setSortMode(e.target.value)}
+            >
+              <option value='date'>дата добавления (новые → старые)</option>
+              <option value='name'>имя (А → Я)</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div className='plantListWrap'>
+        {sortedPlants.map((plant) => (
+          <PlantCard
+            key={plant.id}
+            plant={plant}
+            editingId={editingId}
+            editPlant={editPlant}
+            startEditPlant={startEditPlant}
+            saveEditPlant={saveEditPlant}
+            cancelEdit={cancelEdit}
+            handleWaterPlant={handleWaterPlant}
+            handleEditPhotoChange={handleEditPhotoChange}
+            handleDeletePlant={handleDeletePlant}
+            formatDate={formatDate}
+            getLastWatering={getLastWatering}
+            addNoteToPlant={addNoteToPlant}
+            deleteNoteFromPlant={deleteNoteFromPlant}
+            noteText={noteTextByPlant[plant.id] || ''}
+            changeNoteText={changeNoteText}
+          />
+        ))}
+      </div>
+
+      {!loadingPlants && plants.length === 0 && (
+        <p className='startMessage'>Добавьте первое растение!</p>
+      )}
+    </div>
+  );
 }
 
 export default App;

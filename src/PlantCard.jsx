@@ -1,195 +1,229 @@
 import React from "react";
 
 function PlantCard({
-    plant,
-    editingId,
-    editPlant,
-    startEditPlant,
-    saveEditPlant,
-    cancelEdit,
-    handleWaterPlant,
-    handleEditPhotoChange,
-    handleDeletePlant,
-    formatDate,
-    getLastWatering,
-    addNoteToPlant,
-    deleteNoteFromPlant,
-    noteText,
-    changeNoteText,
+  plant,
+  editingId,
+  editPlant,
+  startEditPlant,
+  saveEditPlant,
+  cancelEdit,
+  handleWaterPlant,
+  handleEditPhotoChange,
+  handleDeletePlant,
+  formatDate,
+  getLastWatering,
+  addNoteToPlant,
+  deleteNoteFromPlant,
+  noteText,
+  changeNoteText,
 }) {
-    const isEditing = editingId === plant.id;
-    const notes = plant.notes || [];
+  const isEditing = editingId === plant.id;
+  const notes = plant.notes || [];
+  const log = Array.isArray(plant.wateringLog) ? plant.wateringLog : [];
 
-    return (
-        <div className='plantWrap'>
-            <div className='plantInfo'>
-                {isEditing ? (
+  return (
+    <div className='plantWrap'>
+      <div className='plantInfo'>
+        {isEditing ? (
+          <>
+
+            <div className='nameAndDate'>
+              <label className='nameLabel'>
+                Название растения
+                <input
+                  className='input inputPlantName'
+                  type='text'
+                  value={editPlant.name}
+                  onChange={(e) =>
+                    startEditPlant({ ...plant, name: e.target.value })
+                  }
+                />
+              </label>
+              <label className='dateLabel'>
+                Дата появления
+                <input
+                  className='plantDate'
+                  type='date'
+                  value={editPlant.acquiredAt}
+                  onChange={(e) =>
+                    startEditPlant({ ...plant, acquiredAt: e.target.value })
+                  }
+                />
+              </label>
+
+              <input
+                className='fileLoad'
+                type='file'
+                accept='image/*'
+                onChange={handleEditPhotoChange}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 className='plantName'>{plant.name}</h3>
+            <div className="aboutPlant">
+              <div className="photoInfo">
+                {plant.acquiredAt && (
+                  <p className="dateOfAppearance">
+                    <strong>Дата появления: </strong>
+                    {new Date(plant.acquiredAt).toLocaleDateString('ru-RU')}
+                  </p>
+                )}
+
+                {(isEditing ? editPlant?.photo : plant.photo) && (
+                  <img
+                    className='plantPhoto'
+                    src={isEditing ? editPlant?.photo : plant.photo}
+                    alt={isEditing ? editPlant?.name || plant.name : plant.name}
+                  />
+                )}
+              </div>
+              <div className="textInfos">
+                <p>
+                  <strong>Последний полив: </strong>
+                  {getLastWatering(log)}
+                </p>
+
+                {log.length > 0 && (
+                  <details>
+                    <summary>История поливов ({log.length})</summary>
+                    <ul className='wateringList'>
+                      {log.slice(-10).map((date, index) => (
+                        <li key={index}>{formatDate(date)}</li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+
+                <hr />
+
+                <div className="notesBlock">
+                  <h4>Заметки</h4>
+
+                  <div className="notesAdd">
+                    <input
+                      className="input notesInput"
+                      type="text"
+                      placeholder="Новая заметка..."
+                      value={noteText}
+                      onChange={(e) => changeNoteText(plant.id, e.target.value)}
+                    />
+                    <button
+                      className="btn btnSubmit"
+                      type="button"
+                      onClick={() => {
+                        addNoteToPlant(plant.id, notes, noteText);
+                        changeNoteText(plant.id, '');
+                      }}
+                    >
+                      Добавить
+                    </button>
+                  </div>
+
+                  {notes.length === 0 && <p className="notesEmpty">Пока нет заметок.</p>}
+
+                  {notes.length > 0 && (
                     <>
-
-                        <div className='nameAndDate'>
-                            <label className='nameLabel'>
-                                Название растения
-                                <input
-                                    className='input inputPlantName'
-                                    type='text'
-                                    value={editPlant.name}
-                                    onChange={(e) =>
-                                        startEditPlant({ ...plant, name: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label className='dateLabel'>
-                                Дата появления
-                                <input
-                                    className='plantDate'
-                                    type='date'
-                                    value={editPlant.acquiredAt}
-                                    onChange={(e) =>
-                                        startEditPlant({ ...plant, acquiredAt: e.target.value })
-                                    }
-                                />
-                            </label>
-
-                            <input
-                                className='fileLoad'
-                                type='file'
-                                accept='image/*'
-                                onChange={handleEditPhotoChange}
-                            />
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <h3 className='plantName'>{plant.name}</h3>
-                        <div className="aboutPlant">
-                            <div className="photoInfo">
-                                {plant.acquiredAt && (
-                                    <p className="dateOfAppearance">
-                                        <strong>Дата появления: </strong>
-                                        {new Date(plant.acquiredAt).toLocaleDateString('ru-RU')}
-                                    </p>
-                                )}
-
-                                {(isEditing ? editPlant?.photo : plant.photo) && (
-                                    <img
-                                        className='plantPhoto'
-                                        src={isEditing ? editPlant?.photo : plant.photo}
-                                        alt={isEditing ? editPlant?.name || plant.name : plant.name}
-                                    />
-                                )}
+                      <ul className="notesList">
+                        {notes.slice(-3).map((note) => (
+                          <li key={note.id} className="notesItem">
+                            <div>
+                              <div className="notesText">{note.text}</div>
+                              <div className="notesDate">
+                                {formatDate(note.createdAt)}{' '}
+                                {new Date(note.createdAt).toLocaleTimeString('ru-RU', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </div>
                             </div>
-                            <div className="textInfos">
-                                <p>
-                                    <strong>Последний полив: </strong>
-                                    {getLastWatering(plant.wateringLog)}
-                                </p>
+                            <button
+                              className="btn btnDelete"
+                              type="button"
+                              onClick={() => deleteNoteFromPlant(plant.id, notes, note.id)}
+                            >
+                              ✖
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                      {notes.length > 3 && (
+                        <details className="notesMore">
+                          <summary>Показать все заметки ({notes.length - 3})</summary>
 
-                                {plant.wateringLog.length > 0 && (
-                                    <details>
-                                        <summary>История поливов ({plant.wateringLog.length})</summary>
-                                        <ul className='wateringList'>
-                                            {plant.wateringLog.slice(-5).map((date, index) => (
-                                                <li key={index}>{formatDate(date)}</li>
-                                            ))}
-                                        </ul>
-                                    </details>
-                                )}
-
-
-
-                                <div className="notesBlock">
-                                    <h4>Заметки</h4>
-
-                                    {notes.length === 0 && <p className="notesEmpty">Пока нет заметок.</p>}
-
-                                    <ul className="notesList">
-                                        {notes.map((note) => (
-                                            <li key={note.id} className="notesItem">
-                                                <div>
-                                                    <div className="notesText">{note.text}</div>
-                                                    <div className="notesDate">
-                                                        {formatDate(note.createdAt)}{' '}
-                                                        {new Date(note.createdAt).toLocaleTimeString('ru-RU', {
-                                                            hour: '2-digit',
-                                                            minute: '2-digit',
-                                                        })}
-                                                    </div>
-                                                </div>
-                                                <button
-                                                    className="btn btnDelete"
-                                                    type="button"
-                                                    onClick={() => deleteNoteFromPlant(plant.id, notes, note.id)}
-                                                >
-                                                    ✖
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    <div className="notesAdd">
-                                        <input
-                                            className="input notesInput"
-                                            type="text"
-                                            placeholder="Новая заметка..."
-                                            value={noteText}
-                                            onChange={(e) => changeNoteText(plant.id, e.target.value)}
-                                        />
-                                        <button
-                                            className="btn btnSubmit"
-                                            type="button"
-                                            onClick={() => {
-                                                addNoteToPlant(plant.id, notes, noteText);
-                                                changeNoteText(plant.id, '');
-                                            }}
-                                        >
-                                            Добавить
-                                        </button>
-                                    </div>
+                          <ul className="notesList">
+                            {notes.slice(-3).map((note) => (
+                              <li key={note.id} className="notesItem">
+                                <div>
+                                  <div className="notesText">{note.text}</div>
+                                  <div className="notesDate">
+                                    {formatDate(note.createdAt)}{' '}
+                                    {new Date(note.createdAt).toLocaleTimeString('ru-RU', {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}
+                                  </div>
                                 </div>
-                            </div>
-                        </div>
+                                <button
+                                  className="btn btnDelete"
+                                  type="button"
+                                  onClick={() => deleteNoteFromPlant(plant.id, notes, note.id)}
+                                >
+                                  ✖
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </details>
+                      )}
                     </>
-                )}
+                  )}
+                </div>
+              </div>
             </div>
+          </>
+        )}
+      </div>
 
-            <div className='btnsWrap'>
-                {isEditing ? (
-                    <>
-                        <button
-                            className='btn btnSubmit'
-                            onClick={() => saveEditPlant(plant.id)}
-                        >
-                            Сохранить
-                        </button>
-                        <button className='btn btnDelete' onClick={cancelEdit}>
-                            Отмена
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        <button
-                            className='btn btnWatering'
-                            onClick={() => handleWaterPlant(plant.id, plant.wateringLog)}
-                        >
-                            💧
-                        </button>
-                        <button
-                            className='btn btnEdit'
-                            onClick={() => startEditPlant(plant)}
-                        >
-                            ✏️
-                        </button>
-                        <button
-                            className='btn btnDelete'
-                            onClick={() => handleDeletePlant(plant.id)}
-                        >
-                            🗑️
-                        </button>
-                    </>
-                )}
-            </div>
-        </div>
-    );
+      <div className='btnsWrap'>
+        {isEditing ? (
+          <>
+            <button
+              className='btn btnSubmit'
+              onClick={() => saveEditPlant(plant.id)}
+            >
+              Сохранить
+            </button>
+            <button className='btn btnDelete' onClick={cancelEdit}>
+              Отмена
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              className='btn btnWatering'
+              onClick={() => handleWaterPlant(plant.id, log)}
+            >
+              💧
+            </button>
+            <button
+              className='btn btnEdit'
+              onClick={() => startEditPlant(plant)}
+            >
+              ✏️
+            </button>
+            <button
+              className='btn btnDelete'
+              onClick={() => handleDeletePlant(plant.id)}
+            >
+              🗑️
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default PlantCard;
