@@ -16,7 +16,7 @@ function PlantForm({
                     <label className='nameLabel'>
                         Название растения
                         <input
-                            className='input plantName'
+                            className='input inputPlantName'
                             type='text'
                             placeholder='напр. алоказия фрайдек'
                             value={name}

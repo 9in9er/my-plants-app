@@ -2,10 +2,20 @@
 
 body {
 	font-family: "PT Sans", sans-serif;
+	font-size: 14px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	margin: 0;
 }
 
 .appTitle {
 	margin-top: 0;
+	margin-bottom: 20px;
 }
 
 .mainBlock {
@@ -16,13 +26,13 @@ body {
 	position: relative;
 
 	input {
-
-		&.plantName,
+		&.inputPlantName,
 		&.inputLogin,
 		&.inputPass {
 			flex: 1;
 			min-width: 250px;
 			padding: 10px;
+			font-size: 14px;
 		}
 
 		&.plantDate {
@@ -54,10 +64,6 @@ body {
 					flex-direction: column;
 					font-size: 14px;
 				}
-			}
-
-			.fileLoad {
-				padding: 10px;
 			}
 		}
 
@@ -136,88 +142,139 @@ body {
 		gap: 15px;
 		align-items: flex-start;
 
-		.plantPhoto {
-			width: 100px;
-			height: 120px;
-			object-fit: cover;
-			border-radius: 5px;
-			flex-shrink: 0;
-		}
+		position: relative;
 
 		.plantInfo {
-			flex: 1;
+			width: 100%;
+
+			p {
+				margin: 0;
+				margin-bottom: 10px;
+			}
+
+			.nameAndDate {
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+
+				.dateLabel {
+					display: flex;
+					flex-direction: column;
+					font-size: 14px;
+				}
+
+				.nameLabel {
+					display: flex;
+					flex-direction: column;
+					font-size: 14px;
+				}
+			}
 
 			.plantName {
+				width: 70%;
 				margin: 0 0 10px 0;
+
+				font-size: 24px;
 			}
 
-			.wateringList {
-				margin: 10px 0 0 0;
-				padding-left: 20px;
-			}
-		}
+			.aboutPlant {
+				width: 100%;
 
+				display: flex;
+				flex-direction: row;
 
-		.notesBlock {
-			margin-top: 12px;
-			margin-bottom: 12px;
+				.photoInfo {
+					width: 170px;
 
-			h4 {
-				margin: 0 0 6px 0;
-				font-size: 14px;
-			}
-
-			.notesEmpty {
-				font-size: 13px;
-				color: #777;
-			}
-
-			.notesList {
-				list-style: none;
-				padding-left: 0;
-				margin: 0 0 8px 0;
-
-				.notesItem {
-					display: flex;
-					justify-content: space-between;
-					align-items: flex-start;
-					gap: 8px;
-					margin-bottom: 4px;
-
-					.notesText {
+					.dateOfAppearance {
 						font-size: 14px;
 					}
 
-					.notesDate {
-						font-size: 11px;
-						color: #888;
-					}
+					.plantPhoto {
+						width: 150px;
+						object-fit: cover;
+						border-radius: 5px;
+						flex-shrink: 0;
 
-					.btn.btnDelete {
-						padding: 4px 8px;
+						aspect-ratio: 3/4;
 					}
 				}
-			}
 
-			.notesAdd {
-				display: flex;
-				gap: 8px;
+				.textInfos {
+					width: calc(100% - 170px);
 
-				.notesInput {
-					flex: 1;
-					padding: 6px 8px;
-				}
+					.wateringList {
+						margin: 10px 0 0 0;
+						padding-left: 20px;
+					}
 
-				.btnSubmit {
-					padding: 6px 10px;
+					.notesBlock {
+						margin-top: 12px;
+						margin-bottom: 12px;
+
+						h4 {
+							margin: 0 0 6px 0;
+							font-size: 14px;
+						}
+
+						.notesEmpty {
+							font-size: 13px;
+							color: #777;
+						}
+
+						.notesList {
+							list-style: none;
+							padding-left: 0;
+							margin: 0 0 8px 0;
+
+							.notesItem {
+								display: flex;
+								justify-content: space-between;
+								align-items: flex-start;
+								gap: 8px;
+								margin-bottom: 4px;
+
+								.notesText {
+									font-size: 14px;
+								}
+
+								.notesDate {
+									font-size: 11px;
+									color: #888;
+								}
+
+								.btn.btnDelete {
+									padding: 4px 8px;
+								}
+							}
+						}
+
+						.notesAdd {
+							display: flex;
+							gap: 8px;
+
+							.notesInput {
+								flex: 1;
+								padding: 6px 8px;
+							}
+
+							.btnSubmit {
+								padding: 6px 10px;
+							}
+						}
+					}
 				}
 			}
 		}
 
 		.btnsWrap {
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
 			gap: 10px;
+
+			position: absolute;
+			top: 20px;
+			right: 20px;
 		}
 	}
 }

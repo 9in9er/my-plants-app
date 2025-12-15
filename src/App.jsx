@@ -104,13 +104,13 @@ function App() {
 		await signOut(auth);
 	};
 
-	const resizeImageTo100px = (file, callback) => {
+	const resizeImageTo150px = (file, callback) => {
 		const reader = new FileReader();
 
 		reader.onload = (e) => {
 			const img = new Image();
 			img.onload = () => {
-				const MAX_WIDTH = 100;
+				const MAX_WIDTH = 150;
 				const scale = MAX_WIDTH / img.width;
 				const width = MAX_WIDTH;
 				const height = img.height * scale;
@@ -124,7 +124,7 @@ function App() {
 				const ctx = canvas.getContext('2d');
 				ctx.drawImage(img, 0, 0, width, height);
 
-				const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+				const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
 				callback(dataUrl);
 			};
 			img.src = e.target.result;
@@ -168,7 +168,7 @@ function App() {
 	const handlePhotoChange = (e) => {
 		const file = e.target.files[0];
 		if (!file) return;
-		resizeImageTo100px(file, setPhoto);
+		resizeImageTo150px(file, setPhoto);
 	};
 
 	const addNoteToPlant = async (plantId, currentNotes, text) => {
@@ -208,7 +208,7 @@ function App() {
 	const handleEditPhotoChange = (e) => {
 		const file = e.target.files[0];
 		if (!file) return;
-		resizeImageTo100px(file, (dataUrl) =>
+		resizeImageTo150px(file, (dataUrl) =>
 			setEditPlant({ ...editPlant, photo: dataUrl })
 		);
 	};
