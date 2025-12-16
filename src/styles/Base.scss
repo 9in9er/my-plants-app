@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import "sass-rem";
 
 $sunflowerColor: #ffc312;
 $radiantYellowColor: #f79f1f;
@@ -24,9 +25,13 @@ $magentaPurpleColor: #6f1e51;
 $borderColor: #ddd;
 $grayTextColor: #666;
 
+html {
+  font-size: 16px;
+}
+
 body {
   font-family: 'PT Sans', sans-serif;
-  font-size: 14px;
+  font-size: rem-convert(16px);
 }
 
 h1,
@@ -37,16 +42,12 @@ h5 {
   margin: 0;
 }
 
-.appTitle {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
 .btn {
-  padding: 10px 20px;
+  font-size: rem-convert(14px);
+  padding: rem-convert(10px 20px);
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: rem-convert(5px);
   cursor: pointer;
 
   &.btnSubmit {
@@ -67,8 +68,21 @@ h5 {
 
   &.btnLogOut {
     background: $redPigmentColor;
+
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: rem-convert(20px);
+    right: rem-convert(20px);
   }
+}
+
+@media (max-width: 620px) {
+    html {
+        font-size: 2.58vw;
+    }
+}
+
+@media (max-width: 414px) {
+    html {
+        font-size: 2.2vw;
+    }
 }

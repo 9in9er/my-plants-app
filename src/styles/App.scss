@@ -1,9 +1,17 @@
+@import "sass-rem";
 @import './Base.scss';
 
+.appTitle {
+  margin-top: 0;
+  margin-bottom: rem-convert(20px);
+}
+
 .mainBlock {
-  width: 700px;
+  width: rem-convert(600px);
+
   position: relative;
-  padding: 20px;
+
+  padding: rem-convert(20px);
   margin: 0 auto;
   box-sizing: border-box;
 
@@ -15,8 +23,8 @@
 
   .searchInput {
     width: 100%;
-    padding: 10px;
-    margin: 0 auto 20px;
+    padding: rem-convert(10px);
+    margin: rem-convert(0 auto 20px);
     display: block;
     box-sizing: border-box;
   }
@@ -26,15 +34,16 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-height: 41px;
+  max-height: rem-convert(41px);
 
   .sortControls {
-    margin: 10px 0 20px;
-    font-size: 14px;
+    margin: rem-convert(10px 0 20px);
+    font-size: rem-convert(14px);
 
     select {
-      margin-left: 6px;
-      padding: 4px 8px;
+      margin-left: rem-convert(6px);
+      padding: rem-convert(4px 8px);
+      font-size: rem-convert(14px);
     }
   }
 }
@@ -50,15 +59,43 @@
 
   .modal {
     background: #fff;
-    padding: 20px 24px;
-    border-radius: 8px;
-    max-width: 500px;
+    padding: rem-convert(20px 24px);
+    border-radius: rem-convert(8px);
+    max-width: rem-convert(500px);
     width: 100%;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: rem-convert(0 4px 16px rgba(0, 0, 0, 0.2));
 
     h2 {
       margin-top: 0;
-      margin-bottom: 16px;
+      margin-bottom: rem-convert(16px);
     }
   }
+}
+
+@media (max-width: 620px) {
+    .mainBlock {
+      width: 100%;
+    }
+
+    .topBar {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      max-height: rem-convert(80px);
+
+      .sortControls {
+        margin: 0;
+        margin-top: rem-convert(15px);
+
+        label {
+          display: flex;
+          flex-direction: column;
+        }
+
+        select {
+          margin-top: rem-convert(5px);
+          margin-left: 0;
+        }
+      }
+    }
 }
