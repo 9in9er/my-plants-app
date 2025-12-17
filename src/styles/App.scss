@@ -3,16 +3,15 @@
 
 .appTitle {
   margin-top: 0;
-  margin-bottom: rem-convert(20px);
 }
 
 .mainBlock {
-  width: rem-convert(600px);
+  width: rem-convert(1200px);
 
   position: relative;
 
-  padding: rem-convert(20px);
   margin: 0 auto;
+  margin-top: rem-convert(10px);
   box-sizing: border-box;
 
   .startMessage {
@@ -22,11 +21,17 @@
   }
 
   .searchInput {
-    width: 100%;
-    padding: rem-convert(10px);
-    margin: rem-convert(0 auto 20px);
     display: block;
+
+    width: 100%;
+
+    padding: rem-convert(10px);
+    margin-top: rem-convert(20px);
     box-sizing: border-box;
+
+    font-size: rem-convert(14px);
+    line-height: rem-convert(14px);
+    color: $grayTextColor;
   }
 }
 
@@ -34,35 +39,45 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-height: rem-convert(41px);
+
+  margin-top: rem-convert(20px);
 
   .sortControls {
-    margin: rem-convert(10px 0 20px);
-    font-size: rem-convert(14px);
+    label {
+      font-size: rem-convert(14px);
+      line-height: rem-convert(14px);
+    }
 
     select {
+      font-size: rem-convert(14px);
+      line-height: rem-convert(14px);
+
       margin-left: rem-convert(6px);
       padding: rem-convert(4px 8px);
-      font-size: rem-convert(14px);
     }
   }
 }
 
 .modalOverlay {
+  background: rgba(0, 0, 0, 0.4);
+
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 1000;
 
   .modal {
     background: #fff;
+
+    width: 100%;
+    max-width: rem-convert(500px);
+
     padding: rem-convert(20px 24px);
     border-radius: rem-convert(8px);
-    max-width: rem-convert(500px);
-    width: 100%;
     box-shadow: rem-convert(0 4px 16px rgba(0, 0, 0, 0.2));
 
     h2 {
@@ -72,30 +87,23 @@
   }
 }
 
-@media (max-width: 620px) {
-    .mainBlock {
-      width: 100%;
+
+@media (max-width: 1216px) {
+  .mainBlock {
+    width: rem-convert(600px);
+  }
+}
+
+@media (max-width: 616px) {
+  .mainBlock {
+    width: 97%;
+  }
+}
+
+@media (max-width: 480px) {
+  .topBar {
+    .sortControls {
+      width: 63%;
     }
-
-    .topBar {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      max-height: rem-convert(80px);
-
-      .sortControls {
-        margin: 0;
-        margin-top: rem-convert(15px);
-
-        label {
-          display: flex;
-          flex-direction: column;
-        }
-
-        select {
-          margin-top: rem-convert(5px);
-          margin-left: 0;
-        }
-      }
-    }
+  }
 }

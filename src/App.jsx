@@ -3,11 +3,11 @@ import React from 'react';
 import './styles/Base.scss';
 import './styles/Components.scss';
 import './styles/App.scss';
-import AuthScreen from './AuthScreen';
-import PlantForm from './PlantForm';
-import PlantCard from './PlantCard';
-import { useAuth } from './useAuth';
-import { usePlants } from './usePlants';
+import AuthScreen from './components/AuthScreen';
+import PlantForm from './components/PlantForm';
+import PlantCard from './components/PlantCard';
+import { useAuth } from './hooks/useAuth';
+import { usePlants } from './hooks/usePlants';
 
 function App() {
   const {

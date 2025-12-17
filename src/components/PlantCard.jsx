@@ -1,6 +1,6 @@
 import React from 'react';
-import './styles/Components.scss';
-import './styles/PlantCard.scss';
+import '../styles/Components.scss';
+import '../styles/PlantCard.scss';
 
 function PlantCard({
   plant,
@@ -67,13 +67,6 @@ function PlantCard({
             <h3 className='plantName'>{plant.name}</h3>
             <div className='aboutPlant'>
               <div className='photoInfo'>
-                {plant.acquiredAt && (
-                  <p className='dateOfAppearance'>
-                    <strong>Дата появления: </strong>
-                    {new Date(plant.acquiredAt).toLocaleDateString('ru-RU')}
-                  </p>
-                )}
-
                 {(isEditing ? editPlant?.photo : plant.photo) && (
                   <img
                     className='plantPhoto'
@@ -81,25 +74,32 @@ function PlantCard({
                     alt={isEditing ? editPlant?.name || plant.name : plant.name}
                   />
                 )}
+                
+                <p className='dateOfAppearance'>
+                  <strong>Дата появления: </strong>
+                  {plant.acquiredAt ? new Date(plant.acquiredAt).toLocaleDateString('ru-RU') : 'неизвестно'}
+                </p>
               </div>
               <div className='textInfos'>
-                <p>
-                  <strong>Последний полив: </strong>
-                  {getLastWatering(log)}
-                </p>
+                <div className='aboutWatering'>
+                  <p>
+                    <strong>Последний полив: </strong>
+                    {getLastWatering(log)}
+                  </p>
 
-                {log.length > 0 && (
-                  <details>
-                    <summary>История поливов ({log.length})</summary>
-                    <ul className='wateringList'>
-                      {log.slice(-10).map((date, index) => (
-                        <li key={index}>{formatDate(date)}</li>
-                      ))}
-                    </ul>
-                  </details>
-                )}
+                  {log.length > 0 && (
+                    <details>
+                      <summary>История поливов ({log.length})</summary>
+                      <ul className='wateringList'>
+                        {log.slice(-10).map((date, index) => (
+                          <li key={index}>{formatDate(date)}</li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
 
                 <hr />
+                </div>
 
                 <div className='notesBlock'>
                   <h4>Заметки</h4>

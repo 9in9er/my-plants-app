@@ -5,19 +5,23 @@
   display: flex;
   justify-content: center;
   gap: rem-convert(10px);
+
   margin-top: rem-convert(10px);
 }
 
 .authForm {
+  max-width: rem-convert(400px);
+
   display: flex;
   flex-direction: column;
   gap: rem-convert(10px);
-  max-width: rem-convert(400px);
+
   margin: rem-convert(20px auto);
 
   .authError {
-    color: $redPigmentColor;
     font-size: rem-convert(14px);
+    line-height: rem-convert(14px);
+    color: $redPigmentColor;
   }
 
   .inputLogin,

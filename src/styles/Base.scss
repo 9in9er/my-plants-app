@@ -42,12 +42,21 @@ h5 {
   margin: 0;
 }
 
+input {
+  font-size: rem-convert(14px);
+  line-height: rem-convert(14px);
+}
+
 .btn {
   font-size: rem-convert(14px);
-  padding: rem-convert(10px 20px);
+  line-height: rem-convert(14px);
   color: #fff;
+
+  padding: rem-convert(10px 20px);
+  box-sizing: border-box;
   border: none;
   border-radius: rem-convert(5px);
+
   cursor: pointer;
 
   &.btnSubmit {
@@ -70,19 +79,27 @@ h5 {
     background: $redPigmentColor;
 
     position: absolute;
-    top: rem-convert(20px);
-    right: rem-convert(20px);
+    top: rem-convert(10px);
+    right: rem-convert(0px);
   }
 }
 
-@media (max-width: 620px) {
-    html {
-        font-size: 2.58vw;
-    }
+@media (max-width: 616px) {
+  html {
+    font-size: 2.5vw;
+  }
 }
 
-@media (max-width: 414px) {
-    html {
-        font-size: 2.2vw;
+@media (max-width: 480px) {
+  html {
+    font-size: 3.4vw;
+  }
+
+  .topBar {
+    .btn {
+      &.btnSubmit {
+        width: 35%;
+      }
     }
+  }
 }

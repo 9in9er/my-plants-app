@@ -2,95 +2,128 @@
 @import './Base.scss';
 
 .plantListWrap {
-    display: grid;
-    gap: rem-convert(20px);
-    margin-top: rem-convert(20px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
     .plantWrap {
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+
+        width: 49%;
+
+        margin-top: rem-convert(20px);
+
         border: rem-convert(1px) solid $borderColor;
         border-radius: rem-convert(10px);
         padding: rem-convert(20px);
-        display: flex;
-        gap: rem-convert(15px);
-        align-items: flex-start;
-        position: relative;
+        box-sizing: border-box;
 
         .plantInfo {
             width: 100%;
 
             hr {
-                margin: rem-convert(15px 0);
+                margin-top: rem-convert(15px);
+                margin-bottom: rem-convert(15px);
             }
 
             p {
-                margin: rem-convert(0 0 10px 0);
+                margin: 0;
             }
 
             .plantName {
                 width: calc(100% - rem-convert(200px));
-                margin: rem-convert(0 0 10px 0);
+
+                margin-top: rem-convert(5px);
+
                 font-size: rem-convert(24px);
+                line-height: rem-convert(24px);
             }
 
             .aboutPlant {
-                width: 100%;
                 display: flex;
                 flex-direction: row;
+
+                width: 100%;
+
+                margin-top: rem-convert(20px);
 
                 .photoInfo {
                     width: rem-convert(170px);
 
                     .dateOfAppearance {
                         font-size: rem-convert(14px);
+                        line-height: rem-convert(14px);
+
+                        margin-top: rem-convert(5px);
                     }
 
                     .plantPhoto {
                         width: rem-convert(150px);
-                        object-fit: cover;
-                        border-radius: rem-convert(5px);
+
                         flex-shrink: 0;
-                        aspect-ratio: 3 / 4;
+
+                        object-fit: cover;
+
+                        border-radius: rem-convert(5px);
+
+                        aspect-ratio: 3/4;
                     }
                 }
 
                 .textInfos {
                     width: calc(100% - rem-convert(170px));
 
-                    .wateringList {
-                        margin: rem-convert(10px 0 0 0);
-                        padding-left: rem-convert(20px);
+                    details {
+                        margin-top: rem-convert(10px);
+
+                        .wateringList {
+                            margin-top: rem-convert(10px);
+                            padding-left: rem-convert(20px);
+                        }
                     }
 
                     .notesBlock {
                         h4 {
-                            margin: rem-convert(0 0 6px 0);
                             font-size: rem-convert(14px);
+                            line-height: rem-convert(14px);
                         }
 
                         .notesEmpty {
                             font-size: rem-convert(13px);
+                            line-height: rem-convert(13px);
                             color: $grayTextColor;
+
+                            margin-top: rem-convert(10px);
                         }
 
                         .notesList {
                             list-style: none;
+
                             padding-left: 0;
-                            margin: rem-convert(0 0 8px 0);
+                            margin-top: rem-convert(15px);
 
                             .notesItem {
                                 display: flex;
                                 justify-content: space-between;
                                 align-items: flex-start;
                                 gap: rem-convert(8px);
-                                margin-bottom: rem-convert(4px);
+
+                                margin-top: rem-convert(10px);
 
                                 .notesText {
                                     font-size: rem-convert(14px);
+                                    line-height: rem-convert(14px);
                                 }
 
                                 .notesDate {
                                     font-size: rem-convert(11px);
+                                    line-height: rem-convert(11px);
                                     color: $grayTextColor;
+
+                                    margin-top: rem-convert(5px);
                                 }
 
                                 .btn.btnDelete {
@@ -105,6 +138,7 @@
                             summary {
                                 cursor: pointer;
                                 font-size: rem-convert(13px);
+                                line-height: rem-convert(13px);
                                 color: $grayTextColor;
                             }
                         }
@@ -112,10 +146,12 @@
                         .notesAdd {
                             display: flex;
                             gap: rem-convert(8px);
-                            margin-bottom: rem-convert(10px);
+
+                            margin-top: rem-convert(10px);
 
                             .notesInput {
                                 flex: 1;
+
                                 padding: rem-convert(6px 8px);
                             }
 
@@ -135,10 +171,11 @@
                     gap: rem-convert(10px);
 
                     .nameAndDate {
+                        width: 100%;
+
                         display: flex;
                         flex-wrap: wrap;
                         gap: rem-convert(10px);
-                        width: 100%;
 
                         .dateLabel,
                         .nameLabel {
@@ -159,6 +196,7 @@
             display: flex;
             flex-direction: row;
             gap: rem-convert(10px);
+
             position: absolute;
             top: rem-convert(20px);
             right: rem-convert(20px);
@@ -167,8 +205,40 @@
 }
 
 
-@media (max-width: 620px) {
+@media (max-width: 1216px) {
     .plantListWrap {
-        margin-top: rem-convert(40px);
+        .plantWrap {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .plantListWrap {
+        .plantWrap {
+            .btnsWrap {
+                flex-direction: column;
+            }
+
+            .plantInfo {
+                .plantName {
+                    width: 82%;
+
+                    margin-top: 0;
+                }
+
+                .aboutPlant {
+                    .textInfos {
+                        width: 40%;
+
+                        .notesBlock {
+                            margin-top: 100%;
+                            margin-left: rem-convert(-170px);
+                            width: 250%;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

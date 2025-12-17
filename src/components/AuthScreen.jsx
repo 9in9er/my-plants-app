@@ -1,6 +1,6 @@
 import React from 'react';
-import './styles/Components.scss';
-import './styles/AuthScreen.scss';
+import '../styles/Components.scss';
+import '../styles/AuthScreen.scss';
 
 function AuthScreen({
   authMode,
