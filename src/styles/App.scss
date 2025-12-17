@@ -19,20 +19,6 @@
     color: $grayTextColor;
     font-style: italic;
   }
-
-  .searchInput {
-    display: block;
-
-    width: 100%;
-
-    padding: rem-convert(10px);
-    margin-top: rem-convert(20px);
-    box-sizing: border-box;
-
-    font-size: rem-convert(14px);
-    line-height: rem-convert(14px);
-    color: $grayTextColor;
-  }
 }
 
 .topBar {
@@ -41,6 +27,19 @@
   justify-content: space-between;
 
   margin-top: rem-convert(20px);
+
+  .searchInput {
+    display: block;
+
+    width: 47%;
+
+    padding: rem-convert(10px);
+    box-sizing: border-box;
+
+    font-size: rem-convert(14px);
+    line-height: rem-convert(14px);
+    color: $grayTextColor;
+  }
 
   .sortControls {
     label {
@@ -53,7 +52,7 @@
       line-height: rem-convert(14px);
 
       margin-left: rem-convert(6px);
-      padding: rem-convert(4px 8px);
+      padding: rem-convert(10px);
     }
   }
 }
@@ -92,18 +91,46 @@
   .mainBlock {
     width: rem-convert(600px);
   }
+
+  .topBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .searchInput {
+      width: 100%;
+      order: 3;
+
+      margin-top: rem-convert(20px);
+    }
+  }
 }
 
 @media (max-width: 616px) {
   .mainBlock {
     width: 97%;
   }
+
+  .topBar {
+    .sortControls {
+      select {
+        width: 100%;
+        
+        margin-left: 0;
+      }
+    }
+    .btnSubmit {
+      font-size: rem-convert(16px);
+      line-height: rem-convert(16px);
+    }
+  }
 }
 
 @media (max-width: 480px) {
   .topBar {
     .sortControls {
-      width: 63%;
+      width: rem-convert(276px);
     }
   }
 }

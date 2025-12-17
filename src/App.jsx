@@ -79,14 +79,6 @@ function App() {
         Выйти
       </button>
 
-      <input
-        className='searchInput'
-        type='text'
-        placeholder='Поиск по названию'
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-
       {isAddModalOpen && (
         <div className='modalOverlay' onClick={() => setIsAddModalOpen(false)}>
           <div className='modal' onClick={(e) => e.stopPropagation()}>
@@ -120,6 +112,15 @@ function App() {
         >
           Добавить растение
         </button>
+        
+        <input
+          className='searchInput'
+          type='text'
+          placeholder='Поиск по названию'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
         <div className='sortControls'>
           <label>
             Сортировать по:{' '}
