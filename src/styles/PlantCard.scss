@@ -34,7 +34,7 @@
             }
 
             .plantName {
-                width: calc(100% - rem-convert(200px));
+                width: calc(100% - rem-convert(110px));
 
                 margin-top: rem-convert(5px);
 
@@ -127,7 +127,7 @@
                                 }
 
                                 .btn.btnDelete {
-                                    padding: rem-convert(4px 8px);
+                                    padding: rem-convert(2px 4px);
                                 }
                             }
                         }
@@ -196,6 +196,9 @@
         }
 
         .btnsWrap {
+            background-color: white;
+            box-shadow: rem-convert(0px 0px 0px 5px) white;
+
             display: flex;
             flex-direction: row;
             gap: rem-convert(10px);
@@ -243,8 +246,6 @@
     .plantListWrap {
         .plantWrap {
             .btnsWrap {
-                flex-direction: column;
-
                 &.btnsWrapEditing {
                     width: 100%;
                 }
@@ -256,7 +257,7 @@
 
             .plantInfo {
                 .plantName {
-                    width: 82%;
+                    width: 77%;
 
                     margin-top: 0;
                 }
@@ -284,13 +285,15 @@
                         }
 
                         .aboutWatering {
+                            width: 120%;
+
                             position: absolute;
                             top: 0%;
                             left: 0%;
                         }
 
                         .notesBlock {
-                            margin-top: 54vw;
+                            margin-top: 60vw;
                             margin-left: rem-convert(-170px);
                             width: 232%;
                         }

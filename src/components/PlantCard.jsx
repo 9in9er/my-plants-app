@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Components.scss';
 import '../styles/PlantCard.scss';
+
+import dotsMenuIcon from '../i/dots-menu.svg';
+import closeIcon from '../i/close.svg';
 
 function PlantCard({
   plant,
@@ -19,6 +22,7 @@ function PlantCard({
   noteText,
   changeNoteText,
 }) {
+  const [isDotsMenuOpen, setIsDotsMenuOpen] = useState(false);
   const isEditing = editingId === plant.id;
   const notes = plant.notes || [];
   const log = Array.isArray(plant.wateringLog) ? plant.wateringLog : [];
@@ -96,7 +100,7 @@ function PlantCard({
               <div className='textInfos'>
                 <div className='aboutWatering'>
                   <p>
-                    <strong>Последний полив: </strong>
+                    <strong>Последний полив: <br /></strong>
                     {getLastWatering(log)}
                   </p>
 
@@ -221,17 +225,31 @@ function PlantCard({
                 >
                   💧
                 </button>
+                {isDotsMenuOpen && (
+                  <>
+                    <button
+                      className='btn btnEdit'
+                      onClick={() => startEditPlant(plant)}
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className='btn btnDelete'
+                      onClick={() => handleDeletePlant(plant.id)}
+                    >
+                      🗑️
+                    </button>
+                  </>
+                )}
                 <button
-                  className='btn btnEdit'
-                  onClick={() => startEditPlant(plant)}
+                  className='btn btnDotsMenu'
+                  onClick={() => setIsDotsMenuOpen((prev) => !prev)}
                 >
-                  ✏️
-                </button>
-                <button
-                  className='btn btnDelete'
-                  onClick={() => handleDeletePlant(plant.id)}
-                >
-                  🗑️
+                  {isDotsMenuOpen ? (
+                    <img src={closeIcon} />
+                  ) : (
+                    <img src={dotsMenuIcon} />
+                  )}
                 </button>
               </div>
             </div>

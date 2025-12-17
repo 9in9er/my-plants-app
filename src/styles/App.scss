@@ -116,7 +116,7 @@
     .sortControls {
       select {
         width: 100%;
-        
+
         margin-left: 0;
       }
     }
@@ -130,7 +130,12 @@
 @media (max-width: 480px) {
   .topBar {
     .sortControls {
-      width: rem-convert(276px);
+      width: rem-convert(260px);
+
+      select {
+        font-size: rem-convert(13px);
+        line-height: rem-convert(13px);
+      }
     }
   }
 }
