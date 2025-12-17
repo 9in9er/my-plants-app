@@ -34,6 +34,62 @@ body {
   font-size: rem-convert(16px);
 }
 
+.preloader {
+  background-color: #fff;
+
+  width: 100%;
+  height: 100%;
+
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  bottom: 0%;
+  right: 0%;
+  margin: auto;
+
+  &.hide {
+    display: none;
+  }
+
+  .preloaderWrap {
+    width: rem-convert(150px);
+    height: rem-convert(150px);
+
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    bottom: 0%;
+    right: 0%;
+    margin: auto;
+
+    .leaf {
+      width: 150px;
+
+      aspect-ratio: 1/1;
+
+      filter: grayscale(1);
+
+      animation-name: leaf;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-fill-mode: both;
+      animation-timing-function: ease-in-out;
+    }
+
+    @keyframes leaf {
+      0% {
+        filter: grayscale(1);
+      }
+      55% {
+        filter: grayscale(0);
+      }
+      100% {
+        filter: grayscale(1);
+      }
+    }
+  }
+}
+
 h1,
 h2,
 h3,

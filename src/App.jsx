@@ -9,9 +9,12 @@ import PlantCard from './components/PlantCard';
 import { useAuth } from './hooks/useAuth';
 import { usePlants } from './hooks/usePlants';
 
+import leafPreloader from './i/leaf.svg';
+
 function App() {
   const {
     user,
+    authLoading,
     authMode,
     setAuthMode,
     email,
@@ -56,6 +59,17 @@ function App() {
     sortedPlants,
   } = usePlants(user);
 
+  
+  if (authLoading) {
+    return (
+      <div className='preloader'>
+        <div className="preloaderWrap">
+          <img src={leafPreloader} className='leaf' />
+        </div>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <AuthScreen
@@ -72,96 +86,98 @@ function App() {
     );
   }
   return (
-    <div className='mainBlock'>
-      <h1 className='appTitle'>🌿 Мои растения</h1>
+    <>
+      <div className='mainBlock'>
+        <h1 className='appTitle'>🌿 Мои растения</h1>
 
-      <button className='btn btnLogOut' onClick={handleLogout}>
-        Выйти
-      </button>
+        <button className='btn btnLogOut' onClick={handleLogout}>
+          Выйти
+        </button>
 
-      {isAddModalOpen && (
-        <div className='modalOverlay' onClick={() => setIsAddModalOpen(false)}>
-          <div className='modal' onClick={(e) => e.stopPropagation()}>
-            <h2>Добавить растение</h2>
+        {isAddModalOpen && (
+          <div className='modalOverlay' onClick={() => setIsAddModalOpen(false)}>
+            <div className='modal' onClick={(e) => e.stopPropagation()}>
+              <h2>Добавить растение</h2>
 
-            <PlantForm
-              name={name}
-              acquiredAt={acquiredAt}
-              onNameChange={setName}
-              onDateChange={setAcquiredAt}
-              onPhotoChange={handlePhotoChange}
-              onSubmit={(e) => {
-                handleAddPlant(e);
-                setIsAddModalOpen(false);
-              }}
-              onCancel={() => setIsAddModalOpen(false)}
-            />
+              <PlantForm
+                name={name}
+                acquiredAt={acquiredAt}
+                onNameChange={setName}
+                onDateChange={setAcquiredAt}
+                onPhotoChange={handlePhotoChange}
+                onSubmit={(e) => {
+                  handleAddPlant(e);
+                  setIsAddModalOpen(false);
+                }}
+                onCancel={() => setIsAddModalOpen(false)}
+              />
+            </div>
+          </div>
+        )}
+
+        {loadingPlants && (
+          <p className='startMessage'>Загружаем ваши растения…</p>
+        )}
+
+        <div className='topBar'>
+          <button
+            className='btn btnSubmit'
+            type='button'
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            Добавить растение
+          </button>
+          
+          <input
+            className='searchInput'
+            type='text'
+            placeholder='Поиск по названию'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+
+          <div className='sortControls'>
+            <label>
+              Сортировать по:{' '}
+              <select
+                value={sortMode}
+                onChange={(e) => setSortMode(e.target.value)}
+              >
+                <option value='date'>дата добавления (новые → старые)</option>
+                <option value='name'>имя (А → Я)</option>
+              </select>
+            </label>
           </div>
         </div>
-      )}
 
-      {loadingPlants && (
-        <p className='startMessage'>Загружаем ваши растения…</p>
-      )}
-
-      <div className='topBar'>
-        <button
-          className='btn btnSubmit'
-          type='button'
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          Добавить растение
-        </button>
-        
-        <input
-          className='searchInput'
-          type='text'
-          placeholder='Поиск по названию'
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-
-        <div className='sortControls'>
-          <label>
-            Сортировать по:{' '}
-            <select
-              value={sortMode}
-              onChange={(e) => setSortMode(e.target.value)}
-            >
-              <option value='date'>дата добавления (новые → старые)</option>
-              <option value='name'>имя (А → Я)</option>
-            </select>
-          </label>
+        <div className='plantListWrap'>
+          {sortedPlants.map((plant) => (
+            <PlantCard
+              key={plant.id}
+              plant={plant}
+              editingId={editingId}
+              editPlant={editPlant}
+              startEditPlant={startEditPlant}
+              saveEditPlant={saveEditPlant}
+              cancelEdit={cancelEdit}
+              handleWaterPlant={handleWaterPlant}
+              handleEditPhotoChange={handleEditPhotoChange}
+              handleDeletePlant={handleDeletePlant}
+              formatDate={formatDate}
+              getLastWatering={getLastWatering}
+              addNoteToPlant={addNoteToPlant}
+              deleteNoteFromPlant={deleteNoteFromPlant}
+              noteText={noteTextByPlant[plant.id] || ''}
+              changeNoteText={changeNoteText}
+            />
+          ))}
         </div>
-      </div>
 
-      <div className='plantListWrap'>
-        {sortedPlants.map((plant) => (
-          <PlantCard
-            key={plant.id}
-            plant={plant}
-            editingId={editingId}
-            editPlant={editPlant}
-            startEditPlant={startEditPlant}
-            saveEditPlant={saveEditPlant}
-            cancelEdit={cancelEdit}
-            handleWaterPlant={handleWaterPlant}
-            handleEditPhotoChange={handleEditPhotoChange}
-            handleDeletePlant={handleDeletePlant}
-            formatDate={formatDate}
-            getLastWatering={getLastWatering}
-            addNoteToPlant={addNoteToPlant}
-            deleteNoteFromPlant={deleteNoteFromPlant}
-            noteText={noteTextByPlant[plant.id] || ''}
-            changeNoteText={changeNoteText}
-          />
-        ))}
+        {!loadingPlants && plants.length === 0 && (
+          <p className='startMessage'>Добавьте первое растение!</p>
+        )}
       </div>
-
-      {!loadingPlants && plants.length === 0 && (
-        <p className='startMessage'>Добавьте первое растение!</p>
-      )}
-    </div>
+    </>
   );
 }
 

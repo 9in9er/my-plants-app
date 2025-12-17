@@ -9,6 +9,7 @@ import {
 
 export function useAuth() {
   const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [authMode, setAuthMode] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +18,7 @@ export function useAuth() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser || null);
+      setAuthLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -51,6 +53,7 @@ export function useAuth() {
 
   return {
     user,
+    authLoading,
     authMode,
     setAuthMode,
     email,
