@@ -186,9 +186,12 @@
                 }
             }
 
-            .inputPlantName,
-            .plantDate {
+            .inputPlantName {
                 padding: rem-convert(10px);
+            }
+
+            .plantDate {
+                padding: rem-convert(9px);
             }
         }
 
@@ -200,6 +203,13 @@
             position: absolute;
             top: rem-convert(20px);
             right: rem-convert(20px);
+
+            &.btnsWrapEditing {
+                top: initial;
+                right: initial;
+                bottom: rem-convert(20px);
+                left: rem-convert(20px);
+            }
         }
     }
 }
@@ -209,6 +219,22 @@
     .plantListWrap {
         .plantWrap {
             width: 100%;
+
+            input {
+                &.fileLoad {
+                    width: 100%;
+                }
+            }
+
+            .btnsWrap {
+                &.btnsWrapEditing {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+            }
         }
     }
 }
@@ -218,6 +244,10 @@
         .plantWrap {
             .btnsWrap {
                 flex-direction: column;
+
+                &.btnsWrapEditing {
+                    width: 100%;
+                }
 
                 .btn {
                     padding: rem-convert(10px 10px);
@@ -229,6 +259,14 @@
                     width: 82%;
 
                     margin-top: 0;
+                }
+
+                .nameLabel {
+                    width: 61%;
+                }
+
+                .dateLabel {
+                    width: 36%;
                 }
 
                 .aboutPlant {

@@ -60,6 +60,19 @@ function PlantCard({
                 accept='image/*'
                 onChange={handleEditPhotoChange}
               />
+
+              <div className='btnsWrap btnsWrapEditing'>
+                <button
+                  className='btn btnSubmit'
+                  onClick={() => saveEditPlant(plant.id)}
+                >
+                  Сохранить
+                </button>
+                <button className='btn btnDelete' onClick={cancelEdit}>
+                  Отмена
+                </button>
+              </div>
+
             </div>
           </div>
         ) : (
@@ -74,7 +87,7 @@ function PlantCard({
                     alt={isEditing ? editPlant?.name || plant.name : plant.name}
                   />
                 )}
-                
+
                 <p className='dateOfAppearance'>
                   <strong>Дата появления: </strong>
                   {plant.acquiredAt ? new Date(plant.acquiredAt).toLocaleDateString('ru-RU') : 'неизвестно'}
@@ -98,7 +111,7 @@ function PlantCard({
                     </details>
                   )}
 
-                <hr />
+                  <hr />
                 </div>
 
                 <div className='notesBlock'>
@@ -200,44 +213,28 @@ function PlantCard({
                   )}
                 </div>
               </div>
+              
+              <div className='btnsWrap'>
+                <button
+                  className='btn btnWatering'
+                  onClick={() => handleWaterPlant(plant.id, log)}
+                >
+                  💧
+                </button>
+                <button
+                  className='btn btnEdit'
+                  onClick={() => startEditPlant(plant)}
+                >
+                  ✏️
+                </button>
+                <button
+                  className='btn btnDelete'
+                  onClick={() => handleDeletePlant(plant.id)}
+                >
+                  🗑️
+                </button>
+              </div>
             </div>
-          </>
-        )}
-      </div>
-
-      <div className='btnsWrap'>
-        {isEditing ? (
-          <>
-            <button
-              className='btn btnSubmit'
-              onClick={() => saveEditPlant(plant.id)}
-            >
-              Сохранить
-            </button>
-            <button className='btn btnDelete' onClick={cancelEdit}>
-              Отмена
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              className='btn btnWatering'
-              onClick={() => handleWaterPlant(plant.id, log)}
-            >
-              💧
-            </button>
-            <button
-              className='btn btnEdit'
-              onClick={() => startEditPlant(plant)}
-            >
-              ✏️
-            </button>
-            <button
-              className='btn btnDelete'
-              onClick={() => handleDeletePlant(plant.id)}
-            >
-              🗑️
-            </button>
           </>
         )}
       </div>
