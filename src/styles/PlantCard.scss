@@ -218,6 +218,10 @@
         .plantWrap {
             .btnsWrap {
                 flex-direction: column;
+
+                .btn {
+                    padding: rem-convert(10px 10px);
+                }
             }
 
             .plantInfo {
@@ -228,13 +232,29 @@
                 }
 
                 .aboutPlant {
+                    .photoInfo {
+                         .dateOfAppearance {
+                            line-height: rem-convert(18px);
+                         }
+                    }
                     .textInfos {
-                        width: 40%;
+                        position: relative;
+                        width: 43%;
+
+                        hr {
+                            display: none;
+                        }
+
+                        .aboutWatering {
+                            position: absolute;
+                            top: 0%;
+                            left: 0%;
+                        }
 
                         .notesBlock {
-                            margin-top: 100%;
+                            margin-top: 54vw;
                             margin-left: rem-convert(-170px);
-                            width: 250%;
+                            width: 232%;
                         }
                     }
                 }

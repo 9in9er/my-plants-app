@@ -118,8 +118,8 @@ export function usePlants(user) {
     const extendedLog = [...prevLog, newEntry];
 
     const limitedLog =
-      extendedLog.length > 10 ?
-        extendedLog.slice(extendedLog.length - 10) :
+      extendedLog.length > 8 ?
+        extendedLog.slice(extendedLog.length - 8) :
         extendedLog;
 
     const plantRef = doc(db, 'plants', id);

@@ -91,7 +91,7 @@ function PlantCard({
                     <details>
                       <summary>История поливов ({log.length})</summary>
                       <ul className='wateringList'>
-                        {log.slice(-10).map((date, index) => (
+                        {log.slice(-8).map((date, index) => (
                           <li key={index}>{formatDate(date)}</li>
                         ))}
                       </ul>
