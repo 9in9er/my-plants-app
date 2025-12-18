@@ -9,6 +9,8 @@ import PlantCard from './components/PlantCard';
 import { useAuth } from './hooks/useAuth';
 import { usePlants } from './hooks/usePlants';
 
+import ScrollToTop from './components/ScrollToTop';
+
 import leafPreloader from './i/leaf.svg';
 
 function App() {
@@ -65,7 +67,7 @@ function App() {
     return (
       <div className='preloader'>
         <div className="preloaderWrap">
-          <img src={leafPreloader} className='leaf' />
+          <img src={leafPreloader} className='leaf' alt='загрузка...' />
         </div>
       </div>
     );
@@ -179,6 +181,7 @@ function App() {
           <p className='startMessage'>Добавьте первое растение!</p>
         )}
       </div>
+      <ScrollToTop />
     </>
   );
 }
