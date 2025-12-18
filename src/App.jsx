@@ -46,6 +46,7 @@ function App() {
     handleAddPlant,
     handleDeletePlant,
     handleWaterPlant,
+    deleteWateringEntry,
     handlePhotoChange,
     addNoteToPlant,
     deleteNoteFromPlant,
@@ -161,6 +162,7 @@ function App() {
               saveEditPlant={saveEditPlant}
               cancelEdit={cancelEdit}
               handleWaterPlant={handleWaterPlant}
+              deleteWateringEntry={deleteWateringEntry}
               handleEditPhotoChange={handleEditPhotoChange}
               handleDeletePlant={handleDeletePlant}
               formatDate={formatDate}

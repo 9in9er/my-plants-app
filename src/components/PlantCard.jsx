@@ -13,6 +13,7 @@ function PlantCard({
   saveEditPlant,
   cancelEdit,
   handleWaterPlant,
+  deleteWateringEntry,
   handleEditPhotoChange,
   handleDeletePlant,
   formatDate,
@@ -108,8 +109,18 @@ function PlantCard({
                     <details>
                       <summary>История поливов ({log.length})</summary>
                       <ul className='wateringList'>
-                        {log.slice(-8).map((date, index) => (
-                          <li key={index}>{formatDate(date)}</li>
+                        {[...log].reverse().slice(0, 8).map((date, index) => (
+                          <li key={index}>
+                            {formatDate(date)}
+                            <button
+                              className='btn btnDelete'
+                              type='button'
+                              onClick={() => deleteWateringEntry(plant.id, log, date)
+                              }
+                            >
+                              ✖
+                            </button>
+                          </li>
                         ))}
                       </ul>
                     </details>

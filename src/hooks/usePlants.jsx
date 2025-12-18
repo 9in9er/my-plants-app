@@ -128,6 +128,17 @@ export function usePlants(user) {
     });
   };
 
+  const deleteWateringEntry = async (id, wateringLog, entryToDelete) => {
+    const prevLog = Array.isArray(wateringLog) ? wateringLog : [];
+
+    const updateLog = prevLog.filter((entry) => entry !== entryToDelete);
+
+    const plantRef = doc(db, 'plants', id);
+    await updateDoc(plantRef, {
+      wateringLog: updateLog,
+    });
+  };
+
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -250,6 +261,7 @@ export function usePlants(user) {
     handleAddPlant,
     handleDeletePlant,
     handleWaterPlant,
+    deleteWateringEntry,
     handlePhotoChange,
     addNoteToPlant,
     deleteNoteFromPlant,

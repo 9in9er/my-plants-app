@@ -82,6 +82,12 @@
                         .wateringList {
                             margin-top: rem-convert(10px);
                             padding-left: rem-convert(20px);
+
+                            .btn.btnDelete {
+                                padding: rem-convert(2px 4px);
+                                
+                                margin-left: rem-convert(10px);
+                            }
                         }
                     }
 
