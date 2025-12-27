@@ -148,6 +148,7 @@ function App() {
               >
                 <option value='date'>дата добавления (новые → старые)</option>
                 <option value='name'>имя (А → Я)</option>
+                <option value='watering'>последний полив (давно → недавно)</option>
               </select>
             </label>
           </div>

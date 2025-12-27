@@ -234,6 +234,20 @@ export function usePlants(user) {
       });
     }
 
+    if (sortMode === 'watering') {
+      const aLog = Array.isArray(a.wateringLog) ? a.wateringLog : [];
+      const bLog = Array.isArray(b.wateringLog) ? b.wateringLog : [];
+
+      const aLast = aLog.length ? aLog[aLog.length - 1] : null;
+      const bLast = bLog.length ? bLog[bLog.length - 1] : null;
+
+      if (!aLast && !bLast) return 0;
+      if (!aLast) return -1;
+      if (!bLast) return 1;
+
+      return aLast.localeCompare(bLast);
+    }
+
     const aDate = a.createdAt || a.acquiredAt || '';
     const bDate = b.createdAt || b.acquiredAt || '';
     return (bDate || '').localeCompare(aDate || '');
