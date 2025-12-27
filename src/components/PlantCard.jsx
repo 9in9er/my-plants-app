@@ -26,6 +26,9 @@ function PlantCard({
   const [isDotsMenuOpen, setIsDotsMenuOpen] = useState(false);
   const isEditing = editingId === plant.id;
   const notes = plant.notes || [];
+  const sortedNotes = [...notes].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
   const log = Array.isArray(plant.wateringLog) ? plant.wateringLog : [];
 
   return (
@@ -152,14 +155,14 @@ function PlantCard({
                     </button>
                   </div>
 
-                  {notes.length === 0 && (
+                  {sortedNotes.length === 0 && (
                     <p className='notesEmpty'>Пока нет заметок.</p>
                   )}
 
-                  {notes.length > 0 && (
+                  {sortedNotes.length > 0 && (
                     <>
                       <ul className='notesList'>
-                        {notes.slice(-3).map((note) => (
+                        {sortedNotes.slice(-3).map((note) => (
                           <li key={note.id} className='notesItem'>
                             <div>
                               <div className='notesText'>{note.text}</div>
@@ -185,14 +188,14 @@ function PlantCard({
                           </li>
                         ))}
                       </ul>
-                      {notes.length > 3 && (
+                      {sortedNotes.length > 3 && (
                         <details className='notesMore'>
                           <summary>
-                            Показать все заметки ({notes.length - 3})
+                            Показать все заметки ({sortedNotes.length - 3})
                           </summary>
 
                           <ul className='notesList'>
-                            {notes.slice(0, -3).map((note) => (
+                            {sortedNotes.slice(0, -3).map((note) => (
                               <li key={note.id} className='notesItem'>
                                 <div>
                                   <div className='notesText'>{note.text}</div>
@@ -257,9 +260,9 @@ function PlantCard({
                   onClick={() => setIsDotsMenuOpen((prev) => !prev)}
                 >
                   {isDotsMenuOpen ? (
-                    <img src={closeIcon} />
+                    <img src={closeIcon} alt='close'/>
                   ) : (
-                    <img src={dotsMenuIcon} />
+                    <img src={dotsMenuIcon} alt='menu'/>
                   )}
                 </button>
               </div>
