@@ -29,6 +29,8 @@ function PlantCard({
   const sortedNotes = [...notes].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
+  const latestNotes = sortedNotes.slice(0, 3);
+  const olderNotes = sortedNotes.slice(3);
   const log = Array.isArray(plant.wateringLog) ? plant.wateringLog : [];
 
   return (
@@ -162,7 +164,7 @@ function PlantCard({
                   {sortedNotes.length > 0 && (
                     <>
                       <ul className='notesList'>
-                        {sortedNotes.slice(-3).map((note) => (
+                        {latestNotes.map((note) => (
                           <li key={note.id} className='notesItem'>
                             <div>
                               <div className='notesText'>{note.text}</div>
@@ -188,14 +190,14 @@ function PlantCard({
                           </li>
                         ))}
                       </ul>
-                      {sortedNotes.length > 3 && (
+                      {olderNotes.length > 0 && (
                         <details className='notesMore'>
                           <summary>
                             Показать все заметки ({sortedNotes.length - 3})
                           </summary>
 
                           <ul className='notesList'>
-                            {sortedNotes.slice(0, -3).map((note) => (
+                            {olderNotes.map((note) => (
                               <li key={note.id} className='notesItem'>
                                 <div>
                                   <div className='notesText'>{note.text}</div>
