@@ -131,13 +131,25 @@ function App() {
             Добавить растение
           </button>
           
-          <input
-            className='searchInput'
-            type='text'
-            placeholder='Поиск по названию'
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div className="searchGroup">
+            <input
+              className='searchInput'
+              type='text'
+              placeholder='Поиск по названию'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                type='button'
+                className='btn clearSearch'
+                onClick={() => setSearchQuery('')}
+                aria-label='Очистить поиск'
+              >
+                ×
+              </button>
+            )}
+          </div>
 
           <div className='sortControls'>
             <label>

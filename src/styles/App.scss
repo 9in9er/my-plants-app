@@ -28,18 +28,48 @@
 
   margin-top: rem-convert(20px);
 
-  .searchInput {
-    display: block;
-
+  .searchGroup {
+    position: relative;
     width: 47%;
 
-    padding: rem-convert(10px);
-    box-sizing: border-box;
+    .searchInput {
+      display: block;
 
-    font-size: rem-convert(14px);
-    line-height: rem-convert(14px);
-    color: $grayTextColor;
+      width: 100%;
+
+      padding: rem-convert(10px);
+      box-sizing: border-box;
+
+      font-size: rem-convert(14px);
+      line-height: rem-convert(14px);
+      color: $grayTextColor;
+    }
+
+    .clearSearch {
+      position: absolute;
+      top: 0;
+      right: rem-convert(10px);
+
+      background: none;
+      border: none;
+
+      font-size: rem-convert(26px);
+      color: $grayTextColor;
+      line-height: 1;
+
+      padding: rem-convert(6px);
+
+      opacity: 0.7;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
+
+  
 
   .sortControls {
     label {
@@ -138,7 +168,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
 
-    .searchInput {
+    .searchGroup {
       width: 100%;
       order: 3;
 
