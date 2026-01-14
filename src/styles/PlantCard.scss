@@ -12,7 +12,7 @@
         align-items: flex-start;
         position: relative;
 
-        width: 49%;
+        width: 32.7%;
 
         margin-top: rem-convert(20px);
 
@@ -223,6 +223,14 @@
     }
 }
 
+
+@media (max-width: 1750px) {
+    .plantListWrap {
+        .plantWrap {
+            width: 49%;
+        }
+    }
+}
 
 @media (max-width: 1216px) {
     .plantListWrap {

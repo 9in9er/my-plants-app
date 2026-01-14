@@ -6,13 +6,16 @@
 }
 
 .mainBlock {
-  width: rem-convert(1200px);
+  width: 95%;
+  max-width: (1920px);
 
   position: relative;
 
   margin: 0 auto;
   margin-top: rem-convert(10px);
   box-sizing: border-box;
+
+  padding-bottom: rem-convert(20px);
 
   .startMessage {
     text-align: center;
@@ -30,7 +33,7 @@
 
   .searchGroup {
     position: relative;
-    width: 47%;
+    width: 62%;
 
     .searchInput {
       display: block;
@@ -68,8 +71,6 @@
       }
     }
   }
-
-  
 
   .sortControls {
     label {
@@ -156,6 +157,19 @@
   }
 }
 
+
+@media (max-width: 1750px) {
+  .mainBlock {
+    width: rem-convert(1200px);
+  }
+
+  .topBar {
+    .searchGroup {
+      position: relative;
+      width: 47%;
+    }
+  }
+}
 
 @media (max-width: 1216px) {
   .mainBlock {
