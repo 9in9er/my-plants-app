@@ -13,49 +13,70 @@ function AuthScreen({
   handleLogin,
   handleRegister,
 }) {
-  const onSubmit = authMode === 'login' ? handleLogin : handleRegister;
+  const isLogin = authMode === 'login';
 
   return (
     <div className='mainBlock'>
       <h1>🌿 Мои растения</h1>
 
-      <div className='authToggle'>
-        <button
-          className={`btn ${authMode === 'login' ? 'btnSubmit' : ''}`}
-          onClick={() => setAuthMode('login')}
-        >
-          Войти
-        </button>
-        <button
-          className={`btn ${authMode === 'register' ? 'btnSubmit' : ''}`}
-          onClick={() => setAuthMode('register')}
-        >
-          Регистрация
-        </button>
-      </div>
+      <div className="authScreen">
+        <form className="authForm" onSubmit={authMode === 'login' ? handleLogin : handleRegister}>
+          <h1 className="appTitle">
+            {isLogin ? 'Вход в аккаунт' : 'Регистрация'}
+          </h1>
 
-      <form className='authForm' onSubmit={onSubmit}>
-        <input
-          className='input inputLogin'
-          type='email'
-          placeholder='E-mail'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          className='input inputPass'
-          type='password'
-          placeholder='Пароль (мин. 6 символов)'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {authError && <p className='authError'>{authError}</p>}
-        <button className='btn btnSubmit' type='submit'>
-          {authMode === 'login' ? 'Войти' : 'Зарегистрироваться'}
-        </button>
-      </form>
+          <input
+            type="email"
+            className="inputLogin"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            className="inputPass"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          {authError && <div className="authError">{authError}</div>}
+
+          <button type="submit" className="btn btnSubmit">
+            {isLogin ? 'Войти' : 'Зарегистрироваться'}
+          </button>
+
+          {/* Переключатель режимов, использующий существующий .authToggle */}
+          <div className="authToggle">
+            {isLogin ? (
+              <>
+                <span>Ещё не зарегистрированы?</span>
+                <button
+                  type="button"
+                  className="btn btnToggle"
+                  onClick={() => setAuthMode('register')}
+                >
+                  Зарегистрироваться
+                </button>
+              </>
+            ) : (
+              <>
+                <span>Уже есть аккаунт?</span>
+                <button
+                  type="button"
+                  className="btn btnToggle"
+                  onClick={() => setAuthMode('login')}
+                >
+                  Войти
+                </button>
+              </>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

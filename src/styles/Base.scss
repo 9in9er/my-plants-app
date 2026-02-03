@@ -151,6 +151,10 @@ input {
       object-fit: contain;
     }
   }
+
+  &.btnToggle {
+    color: $grayTextColor;
+  }
 }
 
 @media (max-width: 616px) {

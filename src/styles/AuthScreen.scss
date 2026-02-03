@@ -3,6 +3,7 @@
 
 .authToggle {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: rem-convert(10px);
 

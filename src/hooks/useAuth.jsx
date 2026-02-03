@@ -31,7 +31,15 @@ export function useAuth() {
       setEmail('');
       setPassword('');
     } catch (err) {
-      setAuthError(err.message);
+      if (err.code === 'auth/email-already-in-use') {
+        setAuthError('Пользователь с таким email уже существует');
+      } else if (err.code === 'auth/invalid-email') {
+        setAuthError('Неверный формат email');
+      } else if (err.code === 'auth/weak-password') {
+        setAuthError('Пароль слишком слабый (минимум 6 символов)');
+      } else {
+        setAuthError('Ошибка регистрации. Попробуйте позже.');
+      }
     }
   };
 
@@ -43,7 +51,11 @@ export function useAuth() {
       setEmail('');
       setPassword('');
     } catch (err) {
-      setAuthError(err.message);
+      if (err.code === 'auth/invalid-credential') {
+        setAuthError('Неверный email или пароль');
+      } else {
+        setAuthError('Ошибка входа. Попробуйте позже.');
+      }
     }
   };
 
