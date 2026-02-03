@@ -1,5 +1,3 @@
-import React from 'react';
-
 import './styles/Base.scss';
 import './styles/Components.scss';
 import './styles/App.scss';
@@ -10,6 +8,8 @@ import { useAuth } from './hooks/useAuth';
 import { usePlants } from './hooks/usePlants';
 
 import ScrollToTop from './components/ScrollToTop';
+
+import Footer from './components/Footer';
 
 import leafPreloader from './i/leaf.svg';
 
@@ -195,6 +195,7 @@ function App() {
         )}
       </div>
       <ScrollToTop />
+      <Footer />
     </>
   );
 }

@@ -1,5 +1,4 @@
-// src/components/ScrollToTop.jsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function ScrollToTop() {
   const [visible, setVisible] = useState(false);

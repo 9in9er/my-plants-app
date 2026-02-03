@@ -7,15 +7,13 @@
 
 .mainBlock {
   width: 95%;
-  max-width: (1920px);
+  max-width: rem-convert(1920px);
 
   position: relative;
 
   margin: 0 auto;
   margin-top: rem-convert(10px);
   box-sizing: border-box;
-
-  padding-bottom: rem-convert(20px);
 
   .startMessage {
     text-align: center;
@@ -84,6 +82,30 @@
 
       margin-left: rem-convert(6px);
       padding: rem-convert(10px);
+    }
+  }
+}
+
+footer {
+  width: 95%;
+  max-width: rem-convert(1920px);
+
+  position: relative;
+
+  margin: 0 auto;
+  padding-top: rem-convert(15px);
+  padding-bottom: rem-convert(15px);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .contacts {
+    .contactsIcon {
+      width: rem-convert(35px);
+      height: rem-convert(35px);
+
+      margin-left: rem-convert(10px);
     }
   }
 }
@@ -169,10 +191,18 @@
       width: 47%;
     }
   }
+
+  footer {
+    width: rem-convert(1200px);
+  }
 }
 
 @media (max-width: 1216px) {
   .mainBlock {
+    width: rem-convert(600px);
+  }
+
+  footer {
     width: rem-convert(600px);
   }
 
@@ -193,6 +223,10 @@
 
 @media (max-width: 616px) {
   .mainBlock {
+    width: 97%;
+  }
+
+  footer {
     width: 97%;
   }
 
