@@ -54,7 +54,7 @@ export function useAuth() {
       if (err.code === 'auth/invalid-credential') {
         setAuthError('Неверный email или пароль');
       } else {
-        setAuthError('Ошибка входа. Попробуйте позже.');
+        setAuthError('Ошибка входа. Попробуйте позже.' + err.code);
       }
     }
   };
