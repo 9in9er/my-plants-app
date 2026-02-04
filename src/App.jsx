@@ -10,6 +10,7 @@ import { usePlants } from './hooks/usePlants';
 import ScrollToTop from './components/ScrollToTop';
 
 import Footer from './components/Footer';
+import Header from './components/Header';
 
 import leafPreloader from './i/leaf.svg';
 
@@ -92,7 +93,7 @@ function App() {
   return (
     <>
       <div className='mainBlock'>
-        <h1 className='appTitle'>🌿 Мои растения</h1>
+        <Header />
 
         <button className='btn btnLogOut' onClick={handleLogout}>
           Выйти

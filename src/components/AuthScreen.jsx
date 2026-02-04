@@ -1,6 +1,8 @@
 import '../styles/Components.scss';
 import '../styles/AuthScreen.scss';
 
+import Header from '../components/Header';
+
 function AuthScreen({
   authMode,
   setAuthMode,
@@ -16,7 +18,7 @@ function AuthScreen({
 
   return (
     <div className='mainBlock'>
-      <h1>🌿 Мои растения</h1>
+      <Header />
 
       <div className="authScreen">
         <form className="authForm" onSubmit={authMode === 'login' ? handleLogin : handleRegister}>
