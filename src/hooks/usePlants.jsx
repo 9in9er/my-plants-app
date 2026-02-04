@@ -223,6 +223,19 @@ export function usePlants(user) {
     return formatDate(wateringLog[wateringLog.length - 1]);
   };
 
+  const getDaysSinceLastWatering = (wateringLog) => {
+    if (!wateringLog.length) return null;
+
+    const lastDateIso = wateringLog[wateringLog.length - 1];
+    const last = new Date(lastDateIso);
+    const now = new Date();
+
+    const diffMs = now - last;
+    const diffDays = Math.floor(diffMs / (1000 * 60 *60 *24));
+
+    return diffDays;
+  }
+
   const filteredPlants = plants.filter((plant) =>
     (plant.name || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -286,6 +299,7 @@ export function usePlants(user) {
     cancelEdit,
     formatDate,
     getLastWatering,
+    getDaysSinceLastWatering,
     sortedPlants,
   };
 }

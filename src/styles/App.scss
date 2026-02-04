@@ -82,6 +82,8 @@
 
       margin-left: rem-convert(6px);
       padding: rem-convert(10px);
+
+      border: rem-convert(1px) solid $borderColor;
     }
   }
 }

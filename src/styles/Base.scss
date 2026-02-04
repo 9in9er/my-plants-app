@@ -101,6 +101,7 @@ h5 {
 input {
   font-size: rem-convert(14px);
   line-height: rem-convert(14px);
+  border: rem-convert(1px) solid $borderColor;
 }
 
 .btn {
@@ -121,6 +122,12 @@ input {
 
   &.btnWatering {
     background: $merchantMarineBlueColor;
+  }
+
+  &.btnCancel {
+    background: $redPigmentColor;
+
+    font-weight: 100;
   }
 
   &.btnDelete {

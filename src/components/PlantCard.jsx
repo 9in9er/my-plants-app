@@ -18,6 +18,7 @@ function PlantCard({
   handleDeletePlant,
   formatDate,
   getLastWatering,
+  getDaysSinceLastWatering,
   addNoteToPlant,
   deleteNoteFromPlant,
   noteText,
@@ -32,6 +33,7 @@ function PlantCard({
   const latestNotes = sortedNotes.slice(0, 3);
   const olderNotes = sortedNotes.slice(3);
   const log = Array.isArray(plant.wateringLog) ? plant.wateringLog : [];
+  const daysSinceLast = getDaysSinceLastWatering(log);
 
   return (
     <div className='plantWrap'>
@@ -78,7 +80,7 @@ function PlantCard({
                 >
                   Сохранить
                 </button>
-                <button className='btn btnDelete' onClick={cancelEdit}>
+                <button className='btn btnCancel' onClick={cancelEdit}>
                   Отмена
                 </button>
               </div>
@@ -108,6 +110,9 @@ function PlantCard({
                   <p>
                     <strong>Последний полив: <br /></strong>
                     {getLastWatering(log)}
+                    {daysSinceLast !== null && (
+                      <span> ({daysSinceLast === 0 ? 'сегодня' : `${daysSinceLast} дн. назад`}) </span>
+                    )}
                   </p>
 
                   {log.length > 0 && (

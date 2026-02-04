@@ -59,6 +59,7 @@ function App() {
     cancelEdit,
     formatDate,
     getLastWatering,
+    getDaysSinceLastWatering,
     sortedPlants,
   } = usePlants(user);
 
@@ -182,6 +183,7 @@ function App() {
               handleDeletePlant={handleDeletePlant}
               formatDate={formatDate}
               getLastWatering={getLastWatering}
+              getDaysSinceLastWatering={getDaysSinceLastWatering}
               addNoteToPlant={addNoteToPlant}
               deleteNoteFromPlant={deleteNoteFromPlant}
               noteText={noteTextByPlant[plant.id] || ''}

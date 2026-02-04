@@ -48,7 +48,7 @@ function PlantForm({
           Сохранить
         </button>
         <button
-          className='btn btnDelete'
+          className='btn btnCancel'
           type='button'
           onClick={onCancel}
         >

@@ -16,10 +16,11 @@
 
         margin-top: rem-convert(20px);
 
-        border: rem-convert(1px) solid $borderColor;
         border-radius: rem-convert(10px);
         padding: rem-convert(20px);
         box-sizing: border-box;
+
+        box-shadow: rem-convert(0px 0px 5px) rgba(0, 0, 0, 0.1);
 
         .plantInfo {
             width: 100%;
