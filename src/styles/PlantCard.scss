@@ -4,8 +4,11 @@
 .plantListWrap {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
+    gap: rem-convert(15px);
+
+    margin-top: rem-convert(25px);
 
     .plantWrap {
         display: flex;
@@ -13,8 +16,6 @@
         position: relative;
 
         width: 32.7%;
-
-        margin-top: rem-convert(20px);
 
         border-radius: rem-convert(10px);
         padding: rem-convert(20px);
