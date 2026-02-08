@@ -1,4 +1,3 @@
-import '../styles/Components.scss';
 import '../styles/PlantForm.scss';
 
 function PlantForm({

@@ -1,4 +1,3 @@
-import '../styles/Components.scss';
 import '../styles/AuthScreen.scss';
 
 import Header from '../components/Header';

@@ -1,5 +1,4 @@
 import './styles/Base.scss';
-import './styles/Components.scss';
 import './styles/App.scss';
 import AuthScreen from './components/AuthScreen';
 import PlantForm from './components/PlantForm';
