@@ -18,7 +18,9 @@ function AuthScreen({
 
   return (
     <div className='mainBlock'>
-      <Header />
+      <Header 
+        showCount={false}
+      />
 
       <div className="authScreen">
         <form className="authForm" onSubmit={authMode === 'login' ? handleLogin : handleRegister}>

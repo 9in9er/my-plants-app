@@ -93,7 +93,10 @@ function App() {
   return (
     <>
       <div className='mainBlock'>
-        <Header />
+        <Header 
+          showCount={true}
+          count={plants.length}
+        />
 
         <button className='btn btnLogOut' onClick={handleLogout}>
           Выйти
