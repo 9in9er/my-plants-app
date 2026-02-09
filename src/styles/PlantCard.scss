@@ -81,6 +81,10 @@
                     details {
                         margin-top: rem-convert(10px);
 
+                        summary {
+                            cursor: pointer;
+                        }
+
                         .wateringList {
                             margin-top: rem-convert(10px);
                             padding-left: rem-convert(20px);

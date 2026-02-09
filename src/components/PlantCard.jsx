@@ -18,6 +18,7 @@ function PlantCard({
   formatDate,
   getLastWatering,
   getDaysSinceLastWatering,
+  togglePinPlant,
   addNoteToPlant,
   deleteNoteFromPlant,
   noteText,
@@ -33,6 +34,7 @@ function PlantCard({
   const olderNotes = sortedNotes.slice(3);
   const log = Array.isArray(plant.wateringLog) ? plant.wateringLog : [];
   const daysSinceLast = getDaysSinceLastWatering(log);
+  const isPinned = !!plant.pinned;
 
   return (
     <div className='plantWrap'>
@@ -252,6 +254,12 @@ function PlantCard({
                       onClick={() => startEditPlant(plant)}
                     >
                       ✏️
+                    </button>
+                    <button
+                      className={`btn btnPin ${isPinned ? 'btnPin--active' : ''}`}
+                      onClick={() => togglePinPlant(plant.id, isPinned)}
+                    >
+                      <span>📌</span>
                     </button>
                     <button
                       className='btn btnDelete'

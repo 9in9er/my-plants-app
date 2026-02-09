@@ -141,6 +141,22 @@ input {
     background: $radiantYellowColor;
   }
 
+  &.btnPin {
+    filter: grayscale(1);
+    span {
+        display: block;
+    }
+    &.btnPin--active {
+      filter: grayscale(0);
+      
+      background: $blueMartinaColor;
+
+      span {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+
   &.btnLogOut {
     background: $redPigmentColor;
 

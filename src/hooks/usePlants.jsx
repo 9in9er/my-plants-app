@@ -97,6 +97,7 @@ export function usePlants(user) {
       notes: [],
       userId: user.uid,
       createdAt: new Date().toISOString(),
+      pinned: false,
     };
 
     await addDoc(collection(db, 'plants'), newPlant);
@@ -234,13 +235,27 @@ export function usePlants(user) {
     const diffDays = Math.floor(diffMs / (1000 * 60 *60 *24));
 
     return diffDays;
-  }
+  };
+
+  const togglePinPlant = async (id, currentPinned) => {
+    const plantRef = doc(db, 'plants', id);
+    await updateDoc(plantRef, {
+      pinned: !currentPinned,
+    });
+  };
 
   const filteredPlants = plants.filter((plant) =>
     (plant.name || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const sortedPlants = [...filteredPlants].sort((a, b) => {
+    const aPinned = !!a.pinned;
+    const bPinned = !!b.pinned;
+
+    if (aPinned !== bPinned) {
+      return aPinned ? -1: 1;
+    }
+
     if (sortMode === 'name') {
       return a.name.localeCompare(b.name, 'ru', {
         sensitivity: 'base'
@@ -300,6 +315,7 @@ export function usePlants(user) {
     formatDate,
     getLastWatering,
     getDaysSinceLastWatering,
+    togglePinPlant,
     sortedPlants,
   };
 }

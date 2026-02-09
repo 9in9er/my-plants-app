@@ -60,6 +60,7 @@ function App() {
     formatDate,
     getLastWatering,
     getDaysSinceLastWatering,
+    togglePinPlant,
     sortedPlants,
   } = usePlants(user);
 
@@ -187,6 +188,7 @@ function App() {
               formatDate={formatDate}
               getLastWatering={getLastWatering}
               getDaysSinceLastWatering={getDaysSinceLastWatering}
+              togglePinPlant={togglePinPlant}
               addNoteToPlant={addNoteToPlant}
               deleteNoteFromPlant={deleteNoteFromPlant}
               noteText={noteTextByPlant[plant.id] || ''}
