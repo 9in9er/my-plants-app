@@ -37,7 +37,7 @@ function PlantCard({
   const isPinned = !!plant.pinned;
 
   return (
-    <div className='plantWrap'>
+    <div className={`plantWrap ${isPinned ? 'plantWrap--pinned' : ''}`}>
       <div className='plantInfo'>
         {isEditing ? (
           <div className='mainForm'>

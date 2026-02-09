@@ -23,6 +23,10 @@
 
         box-shadow: rem-convert(0px 0px 5px) rgba(0, 0, 0, 0.1);
 
+        &.plantWrap--pinned {
+            box-shadow: rem-convert(0px 0px 3px) rgba(0, 0, 0, 1);
+        }
+
         .plantInfo {
             width: 100%;
 
