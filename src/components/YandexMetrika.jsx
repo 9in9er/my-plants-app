@@ -23,8 +23,10 @@ export default function YandexMetrika() {
       a.parentNode.insertBefore(k, a);
     })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
+    console.log(METRIKA_ID);
+    
+
     window.ym(Number(METRIKA_ID), "init", {
-      ssr: true,
       webvisor: true,
       clickmap: true,
       ecommerce: "dataLayer",
