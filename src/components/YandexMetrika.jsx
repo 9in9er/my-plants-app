@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const METRIKA_ID = process.env.REACT_APP_YANDEX_METRIKA_ID;
 
-export default function YandexMetrika() {
+export default function YandexMetrika() {  
   useEffect(() => {
     if (!METRIKA_ID) return;
 
@@ -29,12 +29,8 @@ export default function YandexMetrika() {
     window.ym(Number(METRIKA_ID), "init", {
       webvisor: true,
       clickmap: true,
-      ecommerce: "dataLayer",
-      referrer: document.referrer,
-      url: window.location.href,
       accurateTrackBounce: true,
       trackLinks: true,
-      defer: true,
     });
   }, []);
 
