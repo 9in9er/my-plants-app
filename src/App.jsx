@@ -8,6 +8,8 @@ import { usePlants } from './hooks/usePlants';
 
 import ScrollToTop from './components/ScrollToTop';
 
+import YandexMetrika from './components/YandexMetrika';
+
 import Footer from './components/Footer';
 import Header from './components/Header';
 
@@ -93,6 +95,7 @@ function App() {
   return (
     <>
       <div className='mainBlock'>
+        <YandexMetrika />
         <Header 
           showCount={true}
           count={plants.length}
