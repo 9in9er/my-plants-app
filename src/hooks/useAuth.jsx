@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import {
   createUserWithEmailAndPassword,
@@ -14,6 +15,7 @@ export function useAuth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -30,6 +32,7 @@ export function useAuth() {
       await createUserWithEmailAndPassword(auth, email, password);
       setEmail('');
       setPassword('');
+      navigate('/plants');
     } catch (err) {
       if (err.code === 'auth/email-already-in-use') {
         setAuthError('Пользователь с таким email уже существует');
@@ -50,6 +53,7 @@ export function useAuth() {
       await signInWithEmailAndPassword(auth, email, password);
       setEmail('');
       setPassword('');
+      navigate('/plants');
     } catch (err) {
       if (err.code === 'auth/invalid-credential') {
         setAuthError('Неверный email или пароль');
@@ -60,7 +64,12 @@ export function useAuth() {
   };
 
   const handleLogout = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      console.error('ошибка выхода:', error);
+    }
   };
 
   return {

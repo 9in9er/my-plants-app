@@ -2,17 +2,21 @@ import '../styles/AuthScreen.scss';
 
 import Header from '../components/Header';
 
-function AuthScreen({
-  authMode,
-  setAuthMode,
-  email,
-  password,
-  setEmail,
-  setPassword,
-  authError,
-  handleLogin,
-  handleRegister,
-}) {
+import { useAuth } from '../hooks/useAuth';
+
+function AuthScreen() {
+  const {
+    authMode,
+    setAuthMode,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    authError,
+    handleLogin,
+    handleRegister,
+  } = useAuth();
+
   const isLogin = authMode === 'login';
 
   return (
