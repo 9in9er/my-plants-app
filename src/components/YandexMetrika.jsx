@@ -22,8 +22,6 @@ export default function YandexMetrika() {
       k.src = r;
       a.parentNode.insertBefore(k, a);
     })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    console.log(METRIKA_ID);
     
 
     window.ym(Number(METRIKA_ID), "init", {

@@ -149,35 +149,6 @@ footer {
   }
 }
 
-.modalOverlay {
-  background: rgba(0, 0, 0, 0.4);
-
-  position: fixed;
-  inset: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 1000;
-
-  .modal {
-    background: #fff;
-
-    width: 100%;
-    max-width: rem-convert(500px);
-
-    padding: rem-convert(20px 24px);
-    border-radius: rem-convert(8px);
-    box-shadow: rem-convert(0 4px 16px rgba(0, 0, 0, 0.2));
-
-    h2 {
-      margin-top: 0;
-      margin-bottom: rem-convert(16px);
-    }
-  }
-}
-
 .btnScrollTop {
   background-color: $pixelatedGrassColor;
 

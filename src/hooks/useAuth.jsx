@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 
 export function useAuth() {
@@ -16,6 +17,9 @@ export function useAuth() {
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const navigate = useNavigate();
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -72,6 +76,26 @@ export function useAuth() {
     }
   };
 
+  const handlePasswordReset = async (email) => {
+    console.log('🔍 Отправка на:', email);
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetMessage('✅ Ссылка для сброса отправлена на email!');
+      setTimeout(() => {
+        setShowResetModal(false);
+        setResetEmail('');
+        setResetMessage('');
+      }, 2000);
+    } catch (err) {
+      if (err.code === 'auth/user-not-found') {
+        setResetMessage('❌ Email не найден');
+      } else {
+        setResetMessage('❌ Ошибка отправки. Попробуйте позже.');
+      }
+    }
+  }
+
   return {
     user,
     authLoading,
@@ -85,5 +109,12 @@ export function useAuth() {
     handleLogin,
     handleRegister,
     handleLogout,
+    showResetModal,
+    setShowResetModal,
+    resetEmail,
+    setResetEmail,
+    handlePasswordReset,
+    resetMessage,
+    setResetMessage,
   };
 }
