@@ -6,12 +6,9 @@ import ScrollToTop from './ScrollToTop';
 import Footer from './Footer';
 import Header from './Header';
 
-import leafPreloader from '../i/leaf.svg';
-
 function PlantsPage() {
     const auth = useAuth();
     const {
-        authLoading,
         handleLogout,
     } = useAuth();
     
@@ -50,16 +47,6 @@ function PlantsPage() {
         sortedPlants,
     } = usePlants(auth.user);
     
-    if (authLoading) {
-        return (
-        <div className='preloader'>
-            <div className="preloaderWrap">
-            <img src={leafPreloader} className='leaf' alt='загрузка...' />
-            </div>
-        </div>
-        );
-    }
-
     return (
         <>
         <div className='mainBlock'>
